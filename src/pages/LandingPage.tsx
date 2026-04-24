@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { HowItWorks } from "../components/HowItWorks";
 import { ThemePicker } from "../components/ThemePicker";
 import { useSheetStore } from "../store";
 import { useTheme } from "../themes/ThemeContext";
@@ -87,8 +88,11 @@ export function LandingPage() {
         </div>
       </div>
 
+      {/* Documentation */}
+      <HowItWorks />
+
       {/* Footer */}
-      <p className="font-mono mt-12 text-faint opacity-60" style={{ fontSize: "0.7rem" }}>
+      <p className="font-mono mt-8 text-faint opacity-60" style={{ fontSize: "0.7rem" }}>
         {t.noServer}
       </p>
     </div>

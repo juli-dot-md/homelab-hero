@@ -437,3 +437,56 @@ textarea.rpg-input::placeholder {
   gap: 0.75rem;
   justify-content: flex-end;
 }
+
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+.how-it-works {
+  margin-top: 1.5rem;
+}
+
+.how-it-works-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  padding: 0.6rem 0;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.15s;
+}
+
+.how-it-works-toggle:hover {
+  color: var(--color-accent);
+}
+
+.how-it-works-body {
+  padding-top: 1rem;
+}
+
+.how-it-works-section {
+  margin-bottom: 1rem;
+}
+
+.how-it-works-section:last-child {
+  margin-bottom: 0;
+}
+
+.how-it-works-heading {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 0.3rem 0;
+}
+
+.how-it-works-text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: 0;
+}
