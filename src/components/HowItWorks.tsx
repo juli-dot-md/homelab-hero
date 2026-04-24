@@ -29,17 +29,15 @@ export function HowItWorks() {
   const regionId = useId();
 
   return (
-    <div className="how-it-works w-full max-w-md">
+    <div className="how-it-works w-full max-w-md" style={{ marginTop: "1rem" }}>
       <button
         type="button"
-        className="how-it-works-toggle"
+        className="how-it-works-toggle btn-ghost"
         aria-expanded={open}
         aria-controls={regionId}
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="font-display" style={{ fontSize: "0.7rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-          {open ? "▲" : "▼"} How does this work?
-        </span>
+        {open ? "▲" : "▼"} How does this work?
       </button>
 
       <div

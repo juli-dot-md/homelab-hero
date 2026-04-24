@@ -443,22 +443,14 @@ textarea.rpg-input::placeholder {
    ============================================================ */
 .how-it-works {
   margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .how-it-works-toggle {
   width: 100%;
-  background: transparent;
-  border: none;
-  border-top: 1px solid var(--color-border);
-  padding: 0.6rem 0;
-  color: var(--color-text-faint);
-  cursor: pointer;
-  text-align: center;
-  transition: color 0.15s;
-}
-
-.how-it-works-toggle:hover {
-  color: var(--color-accent);
 }
 
 .how-it-works-body {

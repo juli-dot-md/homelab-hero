@@ -38,7 +38,7 @@ export function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
+    <div className="min-h-screen flex flex-col items-center px-4 py-16">
       {/* Theme picker — top right */}
       <div className="absolute top-4 right-4">
         <ThemePicker />
