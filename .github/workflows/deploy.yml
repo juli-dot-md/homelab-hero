@@ -39,16 +39,19 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      - name: Debug env
+        run: |
+          echo "VITE_BASE_PATH=${VITE_BASE_PATH}"
+          echo "VITE_BASE_URL=${VITE_BASE_URL}"
+        env:
+          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH }}
+          VITE_BASE_URL: ${{ vars.VITE_BASE_URL }}
+
       - name: Build
         run: pnpm build
         env:
-          # Base path: /repo-name for project pages, / for user/org pages
-          # Set VITE_BASE_PATH in repo Settings → Secrets and variables → Actions
-          # e.g. /homelab-hero
-          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/' }}
-          # Full URL for share link generation
-          # Set VITE_BASE_URL in repo variables, e.g. https://yourname.github.io/homelab-hero
-          VITE_BASE_URL: ${{ vars.VITE_BASE_URL || '' }}
+          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH }}
+          VITE_BASE_URL: ${{ vars.VITE_BASE_URL }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
