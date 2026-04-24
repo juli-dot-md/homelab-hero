@@ -265,7 +265,7 @@ export function SharePage() {
           </section>
         )}
 
-        <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>
+        {flavour && <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>}
         <p className="font-mono text-center text-faint opacity-40" style={{ fontSize: "0.65rem" }}>
           {sheet.id}
         </p>
