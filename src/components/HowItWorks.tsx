@@ -23,11 +23,12 @@ const SECTIONS: Section[] = [
     heading: "Export, Import & Sharing",
     paragraphs: [
       "In the editor, the Markdown button opens a panel with your sheet as a .md file — plain text you can read in any editor. You can copy it, download it, or paste in a different sheet to import it.",
-      "To share with a link, host the .md file somewhere public so the raw text (just the plain file contents, not an HTML page around it) is accessible via a URL. Two options that work without a git workflow:",
+      "To share with a link, host the .md file somewhere public and paste the raw URL into the Share panel. Any public URL works. A few easy options:",
     ],
     bullets: [
-      "GitHub Gist (gist.github.com) — paste your markdown into a new public gist, then click Raw. Requires a free GitHub account but no repo or git needed.",
-      "GitHub repository — upload your .md file to a public repo, open the file, click Raw. The URL starts with raw.githubusercontent.com.",
+      "GitHub Gist (gist.github.com) — paste your markdown into a new public gist, then click Raw. Free, no repo needed.",
+      "GitHub repository — upload your .md file to a public repo, open the file, click Raw.",
+      "Pastebin, paste.ee, or any other public paste service — paste the content and use the raw URL.",
     ],
   },
   {
@@ -59,25 +60,32 @@ export function HowItWorks() {
         role="region"
         aria-hidden={!open}
         className="how-it-works-body"
-        style={open ? undefined : { visibility: "hidden", height: 0, overflow: "hidden", padding: 0 }}
+        style={
+          open ? undefined : { visibility: "hidden", height: 0, overflow: "hidden", padding: 0 }
+        }
       >
         {SECTIONS.map((s) => (
           <div key={s.heading} className="how-it-works-section">
             <h3 className="how-it-works-heading">{s.heading}</h3>
             {s.paragraphs.map((p, i) => (
-              <p key={i} className="how-it-works-text">{p}</p>
+              <p key={i} className="how-it-works-text">
+                {p}
+              </p>
             ))}
             {s.bullets && (
               <ul className="how-it-works-bullets">
                 {s.bullets.map((b, i) => (
-                  <li key={i} className="how-it-works-text">{b}</li>
+                  <li key={i} className="how-it-works-text">
+                    {b}
+                  </li>
                 ))}
               </ul>
             )}
           </div>
         ))}
         <p className="how-it-works-text how-it-works-share-footer">
-          Once you have the raw URL, go to the Preview page, click Share, paste the URL, and copy the generated link.
+          Once you have the raw URL, go to the Preview page, click Share, paste the URL, and copy
+          the generated link.
         </p>
       </div>
     </div>

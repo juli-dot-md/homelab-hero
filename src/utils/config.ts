@@ -14,3 +14,18 @@ export function getBaseUrl(): string {
   }
   return "";
 }
+
+/**
+ * CORS proxy URL for fetching remote markdown files.
+ * Set VITE_CORS_PROXY_URL at build time.
+ * Defaults to https://corsproxy.io/?url=
+ *
+ * The proxy URL must accept the target URL appended directly or as a
+ * query param — the raw target URL is percent-encoded and appended.
+ * Expected format: "https://proxy.example.com/?url=" (trailing = or /)
+ */
+export function getProxiedUrl(targetUrl: string): string {
+  const proxy =
+    (import.meta.env.VITE_CORS_PROXY_URL as string | undefined) ?? "https://corsproxy.io/?url=";
+  return `${proxy}${encodeURIComponent(targetUrl)}`;
+}

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tooltip } from "../components/Tooltip";
-import { descriptions } from "../themes/descriptions";
 import { themes } from "../themes";
 import { useTheme } from "../themes/ThemeContext";
+import { descriptions } from "../themes/descriptions";
 import type { HomelabSheet, StatKey } from "../types";
-import { importMarkdown, parseShareUrl } from "../utils";
+import { getProxiedUrl, importMarkdown, parseShareUrl } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -28,7 +28,10 @@ function StatBlock({ label, value, statKey }: { label: string; value: string; st
   return (
     <div className="scroll-card">
       <div className="relative z-10">
-        <div className="font-display text-accent uppercase tracking-widest mb-1" style={{ fontSize: "0.65rem" }}>
+        <div
+          className="font-display text-accent uppercase tracking-widest mb-1"
+          style={{ fontSize: "0.65rem" }}
+        >
           <Tooltip description={descriptions.stats[statKey]}>{label}</Tooltip>
         </div>
         <div className="font-body text-[color:var(--color-text-base)] text-lg">{value}</div>
@@ -40,12 +43,13 @@ function StatBlock({ label, value, statKey }: { label: string; value: string; st
 function ComponentBlock({ name, description }: { name: string; description: string }) {
   return (
     <div className="border-l-2 pl-4 py-1" style={{ borderColor: "var(--color-border)" }}>
-      <div className="font-display text-[color:var(--color-text-base)] font-semibold" style={{ fontSize: "0.85rem" }}>
+      <div
+        className="font-display text-[color:var(--color-text-base)] font-semibold"
+        style={{ fontSize: "0.85rem" }}
+      >
         {name}
       </div>
-      {description && (
-        <div className="font-body text-muted text-base italic">{description}</div>
-      )}
+      {description && <div className="font-body text-muted text-base italic">{description}</div>}
     </div>
   );
 }
@@ -72,41 +76,45 @@ export function SharePage() {
 
     async function load() {
       try {
-        const res = await fetch(src!);
+        const res = await fetch(getProxiedUrl(src as string));
         if (!res.ok) {
-          if (!cancelled) setState({
-            status: "error",
-            message: `Could not load the file (HTTP ${res.status}). Make sure the URL is public and returns a raw file.`,
-          });
+          if (!cancelled)
+            setState({
+              status: "error",
+              message: `Could not load the file (HTTP ${res.status}). Make sure the URL is correct and publicly accessible.`,
+            });
           return;
         }
         const text = await res.text();
         const result = importMarkdown(text);
         if (!result.success) {
-          if (!cancelled) setState({
-            status: "error",
-            message: "The file loaded but could not be parsed as a Homelab Hero sheet.",
-          });
+          if (!cancelled)
+            setState({
+              status: "error",
+              message: "The file loaded but could not be parsed as a Homelab Hero sheet.",
+            });
           return;
         }
         if (!cancelled) {
-          // Apply theme from frontmatter if it's a known theme
           if (result.themeId && result.themeId in themes) {
             setTheme(result.themeId);
           }
           setState({ status: "ready", sheet: result.data });
         }
       } catch {
-        if (!cancelled) setState({
-          status: "error",
-          message:
-            "Could not fetch the file. This is usually a CORS issue — make sure you're using a raw public URL (e.g. raw.githubusercontent.com, not a GitHub HTML page).",
-        });
+        if (!cancelled)
+          setState({
+            status: "error",
+            message:
+              "Could not fetch the file. Check that the URL is correct and the file is publicly accessible.",
+          });
       }
     }
 
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [location.search]);
 
   if (state.status === "loading") {
@@ -158,7 +166,6 @@ export function SharePage() {
           </p>
           <h1
             className="font-display text-accent font-bold mb-4"
-            role="heading"
             style={{ fontSize: "clamp(2rem, 6vw, 3rem)" }}
           >
             {sheet.name}
@@ -204,10 +211,15 @@ export function SharePage() {
               {sheet.customFields.map((field) => (
                 <div key={field.id} className="scroll-card">
                   <div className="relative z-10">
-                    <div className="font-display text-accent uppercase tracking-widest mb-1" style={{ fontSize: "0.65rem" }}>
+                    <div
+                      className="font-display text-accent uppercase tracking-widest mb-1"
+                      style={{ fontSize: "0.65rem" }}
+                    >
                       {field.label}
                     </div>
-                    <div className="font-body text-[color:var(--color-text-base)] text-lg">{field.value}</div>
+                    <div className="font-body text-[color:var(--color-text-base)] text-lg">
+                      {field.value}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -220,9 +232,7 @@ export function SharePage() {
           <section className="mb-8">
             <div className="divider-rune mb-6">{t.dividers.equipmentSection}</div>
             <div className="section-header">
-              <Tooltip description={descriptions.sections.hardware}>
-                {t.sections.hardware}
-              </Tooltip>
+              <Tooltip description={descriptions.sections.hardware}>{t.sections.hardware}</Tooltip>
             </div>
             <div className="flex flex-col gap-3">
               {sheet.hardware.map((h) => (
@@ -236,9 +246,7 @@ export function SharePage() {
         {hasServices && (
           <section className="mb-8">
             <div className="section-header">
-              <Tooltip description={descriptions.sections.skills}>
-                {t.sections.skills}
-              </Tooltip>
+              <Tooltip description={descriptions.sections.skills}>{t.sections.skills}</Tooltip>
             </div>
             <div className="flex flex-col gap-3">
               {sheet.services.map((s) => (

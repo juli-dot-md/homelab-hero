@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SharePage } from "../pages/SharePage";
-import { ThemeProvider } from "../themes/ThemeContext";
 import { themes } from "../themes";
+import { ThemeProvider } from "../themes/ThemeContext";
 
 const VALID_MD = `---
 id: abc123
@@ -48,14 +48,16 @@ describe("<SharePage>", () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  it("fetches the URL from the src param", async () => {
+  it("fetches via the CORS proxy", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       text: async () => VALID_MD,
     } as Response);
     const src = `?src=${encodeURIComponent(RAW_URL)}`;
     renderSharePage(src);
-    expect(fetchMock).toHaveBeenCalledWith(RAW_URL);
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://corsproxy.io/?url=${encodeURIComponent(RAW_URL)}`
+    );
   });
 
   it("renders the sheet name as a heading after loading", async () => {
@@ -82,17 +84,13 @@ describe("<SharePage>", () => {
 
   it("shows an error when src param is missing", async () => {
     renderSharePage("");
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
   });
 
   it("shows an error when fetch fails (network error)", async () => {
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network error"));
     renderSharePage(`?src=${encodeURIComponent(RAW_URL)}`);
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
   });
 
   it("shows an error when fetch returns non-ok status", async () => {
@@ -102,9 +100,7 @@ describe("<SharePage>", () => {
       text: async () => "Not found",
     } as Response);
     renderSharePage(`?src=${encodeURIComponent(RAW_URL)}`);
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
   });
 
   it("shows an error when markdown fails to parse", async () => {
@@ -113,17 +109,15 @@ describe("<SharePage>", () => {
       text: async () => "not valid homelab markdown",
     } as Response);
     renderSharePage(`?src=${encodeURIComponent(RAW_URL)}`);
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
   });
 
-  it("error message mentions CORS for fetch failures", async () => {
+  it("error message mentions the URL being accessible on fetch failure", async () => {
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Failed to fetch"));
     renderSharePage(`?src=${encodeURIComponent(RAW_URL)}`);
     await waitFor(() => {
       const alert = screen.getByRole("alert");
-      expect(alert.textContent?.toLowerCase()).toMatch(/cors|raw|public/);
+      expect(alert.textContent?.toLowerCase()).toMatch(/url|accessible|correct/);
     });
   });
 
@@ -138,6 +132,8 @@ describe("<SharePage>", () => {
       expect(screen.getByRole("heading", { name: "Mike's Homelab" })).toBeInTheDocument()
     );
     // The html element should have the cyberpunk theme class applied
-    expect(document.documentElement.classList.contains(themes["scifi-cyberpunk"].className)).toBe(true);
+    expect(document.documentElement.classList.contains(themes["scifi-cyberpunk"].className)).toBe(
+      true
+    );
   });
 });

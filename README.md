@@ -27,9 +27,7 @@ Sheets are stored as plain `.md` files with YAML frontmatter. To share:
 2. Host the `.md` file publicly — **GitHub Gist** is the easiest (no repo, just paste and click Raw)
 3. On the Preview page, click **Share**, paste the raw URL, copy the generated link
 
-The share link fetches and renders the sheet client-side. No backend involved.
-
-> Raw URLs must allow CORS. `raw.githubusercontent.com` and GitHub Gist raw URLs work out of the box. Pastebin does not.
+The share link fetches the file via a CORS proxy (`corsproxy.io` by default, configurable via `VITE_CORS_PROXY_URL`) and renders it client-side. Any public URL works — GitHub Gist, raw GitHub, Pastebin, paste.ee, etc.
 
 ---
 
