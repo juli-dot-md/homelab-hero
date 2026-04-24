@@ -1,0 +1,46 @@
+.theme-rpg-highcourt {
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0e0818;
+  --color-bg-card: rgba(20, 10, 35, 0.65);
+  --color-bg-input: rgba(12, 6, 25, 0.8);
+  --color-bg-card-inner: rgba(180, 160, 220, 0.08);
+
+  --color-text-base: #e8e0f4;
+  --color-text-muted: #a898c8;
+  --color-text-faint: #5a4880;
+
+  --color-accent: #c4a8e8;
+  --color-accent-dim: #7a58a8;
+  --color-accent-glow: rgba(196, 168, 232, 0.18);
+  --color-accent-glow-strong: rgba(196, 168, 232, 0.38);
+
+  --color-danger: #e87878;
+  --color-danger-dim: #a84848;
+  --color-danger-bg: rgba(232, 120, 120, 0.12);
+
+  --color-border: #6a48a0;
+  --color-border-focus: #c4a8e8;
+
+  --btn-primary-bg: linear-gradient(135deg, #7a58a8, #4a3078);
+  --btn-primary-bg-hover: linear-gradient(135deg, #c4a8e8, #7a58a8);
+  --btn-primary-text: #0e0818;
+  --btn-primary-border: #c4a8e8;
+
+  --decor-corner: "❧";
+
+  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(180, 140, 220, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(120, 80, 180, 0.07) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(
+      ellipse at 10% 90%,
+      rgba(180, 140, 220, 0.07) 0%,
+      transparent 50%
+    ), radial-gradient(ellipse at 90% 10%, rgba(120, 80, 180, 0.05) 0%, transparent 50%);
+}
+
+.theme-rpg-highcourt h1,
+.theme-rpg-highcourt .text-accent {
+  text-shadow: 0 0 24px rgba(196, 168, 232, 0.25);
+}

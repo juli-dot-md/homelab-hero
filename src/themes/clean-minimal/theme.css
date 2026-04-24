@@ -1,0 +1,82 @@
+.theme-clean-minimal {
+  --font-display: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #f8f9fa;
+  --color-bg-card: #ffffff;
+  --color-bg-input: #ffffff;
+  --color-bg-card-inner: rgba(30, 64, 175, 0.04);
+
+  --color-text-base: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-faint: #94a3b8;
+
+  --color-accent: #1e40af;
+  --color-accent-dim: #1e3a8a;
+  --color-accent-glow: rgba(30, 64, 175, 0.12);
+  --color-accent-glow-strong: rgba(30, 64, 175, 0.25);
+
+  --color-danger: #dc2626;
+  --color-danger-dim: #b91c1c;
+  --color-danger-bg: rgba(220, 38, 38, 0.08);
+
+  --color-border: #e2e8f0;
+  --color-border-focus: #1e40af;
+
+  --btn-primary-bg: linear-gradient(135deg, #1e40af, #1e3a8a);
+  --btn-primary-bg-hover: linear-gradient(135deg, #2563eb, #1e40af);
+  --btn-primary-text: #ffffff;
+  --btn-primary-border: #1e40af;
+
+  --decor-corner: "";
+
+  --bg-texture: none;
+  --bg-texture-card: none;
+}
+
+/* Light mode overrides */
+.theme-clean-minimal body {
+  background-color: #f8f9fa;
+}
+
+.theme-clean-minimal .scroll-card {
+  border-radius: 8px;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.theme-clean-minimal .scroll-card::before {
+  display: none;
+}
+
+.theme-clean-minimal .btn-primary,
+.theme-clean-minimal .btn-ghost,
+.theme-clean-minimal .btn-danger {
+  border-radius: 6px;
+}
+
+.theme-clean-minimal input.rpg-input,
+.theme-clean-minimal textarea.rpg-input {
+  border-radius: 6px;
+  border-color: #e2e8f0;
+  background: #ffffff;
+  color: #1e293b;
+}
+
+.theme-clean-minimal .divider-rune {
+  letter-spacing: 0.05em;
+}
+
+.theme-clean-minimal .section-header {
+  color: #64748b;
+  border-bottom-color: #e2e8f0;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.7rem;
+}
+
+.theme-clean-minimal .corner-ornament::before,
+.theme-clean-minimal .corner-ornament::after {
+  display: none;
+}

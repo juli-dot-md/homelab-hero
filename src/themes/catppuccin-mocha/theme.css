@@ -1,0 +1,64 @@
+.theme-catppuccin-mocha {
+  --font-display: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #1e1e2e;
+  --color-bg-card: #313244;
+  --color-bg-input: #181825;
+  --color-bg-card-inner: rgba(203, 166, 247, 0.07);
+
+  --color-text-base: #cdd6f4;
+  --color-text-muted: #a6adc8;
+  --color-text-faint: #6c7086;
+
+  --color-accent: #cba6f7;
+  --color-accent-dim: #b4befe;
+  --color-accent-glow: rgba(203, 166, 247, 0.18);
+  --color-accent-glow-strong: rgba(203, 166, 247, 0.35);
+
+  --color-danger: #f38ba8;
+  --color-danger-dim: #eba0ac;
+  --color-danger-bg: rgba(243, 139, 168, 0.12);
+
+  --color-border: #45475a;
+  --color-border-focus: #cba6f7;
+
+  --btn-primary-bg: linear-gradient(135deg, #cba6f7, #b4befe);
+  --btn-primary-bg-hover: linear-gradient(135deg, #b4befe, #cba6f7);
+  --btn-primary-text: #1e1e2e;
+  --btn-primary-border: #cba6f7;
+
+  --decor-corner: "";
+
+  --bg-texture: none;
+  --bg-texture-card: none;
+}
+
+.theme-catppuccin-mocha .scroll-card {
+  border-radius: 8px;
+  border-color: #45475a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.theme-catppuccin-mocha .scroll-card::before {
+  display: none;
+}
+
+.theme-catppuccin-mocha .btn-primary,
+.theme-catppuccin-mocha .btn-ghost,
+.theme-catppuccin-mocha .btn-danger,
+.theme-catppuccin-mocha input.rpg-input,
+.theme-catppuccin-mocha textarea.rpg-input {
+  border-radius: 6px;
+}
+
+.theme-catppuccin-mocha .corner-ornament::before,
+.theme-catppuccin-mocha .corner-ornament::after {
+  display: none;
+}
+
+.theme-catppuccin-mocha .section-header {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}

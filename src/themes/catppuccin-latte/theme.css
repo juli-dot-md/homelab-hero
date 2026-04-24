@@ -1,0 +1,75 @@
+.theme-catppuccin-latte {
+  --font-display: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #eff1f5;
+  --color-bg-card: #ffffff;
+  --color-bg-input: #ffffff;
+  --color-bg-card-inner: rgba(136, 57, 239, 0.05);
+
+  --color-text-base: #4c4f69;
+  --color-text-muted: #6c6f85;
+  --color-text-faint: #9ca0b0;
+
+  --color-accent: #8839ef;
+  --color-accent-dim: #7287fd;
+  --color-accent-glow: rgba(136, 57, 239, 0.15);
+  --color-accent-glow-strong: rgba(136, 57, 239, 0.3);
+
+  --color-danger: #d20f39;
+  --color-danger-dim: #e64553;
+  --color-danger-bg: rgba(210, 15, 57, 0.08);
+
+  --color-border: #ccd0da;
+  --color-border-focus: #8839ef;
+
+  --btn-primary-bg: linear-gradient(135deg, #8839ef, #7287fd);
+  --btn-primary-bg-hover: linear-gradient(135deg, #7287fd, #8839ef);
+  --btn-primary-text: #eff1f5;
+  --btn-primary-border: #8839ef;
+
+  --decor-corner: "";
+
+  --bg-texture: none;
+  --bg-texture-card: none;
+}
+
+.theme-catppuccin-latte body {
+  background-color: #eff1f5;
+}
+
+.theme-catppuccin-latte .scroll-card {
+  border-radius: 8px;
+  border-color: #ccd0da;
+  box-shadow: 0 1px 4px rgba(76, 79, 105, 0.1);
+}
+
+.theme-catppuccin-latte .scroll-card::before {
+  display: none;
+}
+
+.theme-catppuccin-latte .btn-primary,
+.theme-catppuccin-latte .btn-ghost,
+.theme-catppuccin-latte .btn-danger,
+.theme-catppuccin-latte input.rpg-input,
+.theme-catppuccin-latte textarea.rpg-input {
+  border-radius: 6px;
+}
+
+.theme-catppuccin-latte input.rpg-input,
+.theme-catppuccin-latte textarea.rpg-input {
+  background: #ffffff;
+  color: #4c4f69;
+  border-color: #ccd0da;
+}
+
+.theme-catppuccin-latte .corner-ornament::before,
+.theme-catppuccin-latte .corner-ornament::after {
+  display: none;
+}
+
+.theme-catppuccin-latte .section-header {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}

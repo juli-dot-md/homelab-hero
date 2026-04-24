@@ -8,10 +8,12 @@ Give it a name, a backstory, and fill in attributes like reliability, cost, secu
 
 ## Themes
 
-Six themes across two categories:
+23 themes across four categories:
 
-**Fantasy** — Epic, Necromancer, Cosy  
-**Sci-Fi** — Utopia, Cyberpunk, Grimdark
+**Fantasy** — Epic, Necromancer, Cosy, Woods, High Court, Blood Moon, Dwarven Forge  
+**Sci-Fi** — Utopia, Cyberpunk, Grimdark, Scrapyard, High Tech, GLaDOS, Solarpunk, Iron Man  
+**Retro** — Phosphor, Amber  
+**Clean** — Minimal, Slate, Latte, Frappé, Macchiato, Mocha
 
 The theme changes the look, the labels, and the placeholder text. Your data stays the same.
 
@@ -28,6 +30,10 @@ Sheets are stored as plain `.md` files with YAML frontmatter. To share:
 The share link fetches and renders the sheet client-side. No backend involved.
 
 > Raw URLs must allow CORS. `raw.githubusercontent.com` and GitHub Gist raw URLs work out of the box. Pastebin does not.
+
+---
+
+100% vibe coded.
 
 ---
 

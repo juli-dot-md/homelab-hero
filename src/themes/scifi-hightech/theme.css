@@ -1,0 +1,57 @@
+.theme-scifi-hightech {
+  --font-display: "Exo 2", sans-serif;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #050a18;
+  --color-bg-card: rgba(8, 18, 40, 0.75);
+  --color-bg-input: rgba(4, 10, 28, 0.88);
+  --color-bg-card-inner: rgba(160, 220, 255, 0.06);
+
+  --color-text-base: #ddf0ff;
+  --color-text-muted: #6a9cbc;
+  --color-text-faint: #2a5a7a;
+
+  --color-accent: #a0d8f8;
+  --color-accent-dim: #3a88b8;
+  --color-accent-glow: rgba(160, 216, 248, 0.15);
+  --color-accent-glow-strong: rgba(160, 216, 248, 0.32);
+
+  --color-danger: #ff6688;
+  --color-danger-dim: #cc2248;
+  --color-danger-bg: rgba(255, 102, 136, 0.1);
+
+  --color-border: #1a4a6a;
+  --color-border-focus: #a0d8f8;
+
+  --btn-primary-bg: linear-gradient(135deg, #1a6898, #0a3868);
+  --btn-primary-bg-hover: linear-gradient(135deg, #a0d8f8, #1a6898);
+  --btn-primary-text: #050a18;
+  --btn-primary-border: #a0d8f8;
+
+  --decor-corner: "◇";
+
+  --bg-texture: radial-gradient(ellipse at 15% 15%, rgba(100, 180, 255, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(60, 140, 200, 0.05) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(
+      ellipse at 10% 90%,
+      rgba(100, 180, 255, 0.06) 0%,
+      transparent 50%
+    ), radial-gradient(ellipse at 90% 10%, rgba(60, 140, 200, 0.04) 0%, transparent 50%);
+}
+
+.theme-scifi-hightech .scroll-card {
+  border-radius: 0;
+  border-color: #1a4a6a;
+}
+
+.theme-scifi-hightech .scroll-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+  opacity: 0.6;
+}

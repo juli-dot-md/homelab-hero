@@ -1,0 +1,47 @@
+.theme-scifi-scrapyard {
+  --font-display: "Share Tech Mono", monospace;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0e0b08;
+  --color-bg-card: rgba(30, 20, 10, 0.75);
+  --color-bg-input: rgba(18, 12, 5, 0.88);
+  --color-bg-card-inner: rgba(180, 100, 40, 0.07);
+
+  --color-text-base: #d8c8a8;
+  --color-text-muted: #9a7850;
+  --color-text-faint: #5a4020;
+
+  --color-accent: #b87838;
+  --color-accent-dim: #7a4810;
+  --color-accent-glow: rgba(184, 120, 56, 0.18);
+  --color-accent-glow-strong: rgba(184, 120, 56, 0.38);
+
+  --color-danger: #cc4422;
+  --color-danger-dim: #8a2808;
+  --color-danger-bg: rgba(204, 68, 34, 0.12);
+
+  --color-border: #5a3810;
+  --color-border-focus: #b87838;
+
+  --btn-primary-bg: linear-gradient(135deg, #7a4810, #4a2800);
+  --btn-primary-bg-hover: linear-gradient(135deg, #b87838, #7a4810);
+  --btn-primary-text: #0e0b08;
+  --btn-primary-border: #b87838;
+
+  --decor-corner: "◈";
+
+  --bg-texture: radial-gradient(ellipse at 25% 75%, rgba(180, 100, 30, 0.1) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 25%, rgba(120, 60, 10, 0.07) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(
+      ellipse at 15% 85%,
+      rgba(180, 100, 30, 0.07) 0%,
+      transparent 50%
+    ), radial-gradient(ellipse at 85% 15%, rgba(120, 60, 10, 0.04) 0%, transparent 50%);
+}
+
+.theme-scifi-scrapyard .scroll-card {
+  border-radius: 0;
+  border-style: dashed;
+  border-color: #5a3810;
+}

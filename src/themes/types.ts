@@ -1,12 +1,33 @@
 import type { StatKey } from "../types";
 
 export type ThemeId =
+  // Fantasy
   | "rpg-epic"
   | "rpg-necromancer"
   | "rpg-cosy"
+  | "rpg-woods"
+  | "rpg-highcourt"
+  | "rpg-bloodmoon"
+  | "rpg-dwarven"
+  // Sci-Fi
   | "scifi-utopia"
   | "scifi-cyberpunk"
-  | "scifi-grimdark";
+  | "scifi-grimdark"
+  | "scifi-scrapyard"
+  | "scifi-hightech"
+  | "scifi-glados"
+  | "scifi-solarpunk"
+  | "scifi-ironman"
+  // Retro
+  | "retro-green"
+  | "retro-amber"
+  // Clean
+  | "clean-minimal"
+  | "clean-slate"
+  | "catppuccin-latte"
+  | "catppuccin-frappe"
+  | "catppuccin-macchiato"
+  | "catppuccin-mocha";
 
 export type ThemeCategory = {
   label: string;

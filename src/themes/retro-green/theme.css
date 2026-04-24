@@ -1,0 +1,64 @@
+.theme-retro-green {
+  --font-display: "Share Tech Mono", monospace;
+  --font-body: "Share Tech Mono", monospace;
+  --font-mono: "Share Tech Mono", monospace;
+
+  --color-bg: #000800;
+  --color-bg-card: rgba(0, 18, 0, 0.85);
+  --color-bg-input: rgba(0, 10, 0, 0.9);
+  --color-bg-card-inner: rgba(0, 255, 0, 0.05);
+
+  --color-text-base: #00e000;
+  --color-text-muted: #008800;
+  --color-text-faint: #004400;
+
+  --color-accent: #00ff00;
+  --color-accent-dim: #008800;
+  --color-accent-glow: rgba(0, 255, 0, 0.2);
+  --color-accent-glow-strong: rgba(0, 255, 0, 0.45);
+
+  --color-danger: #ff4444;
+  --color-danger-dim: #aa0000;
+  --color-danger-bg: rgba(255, 68, 68, 0.1);
+
+  --color-border: #004400;
+  --color-border-focus: #00ff00;
+
+  --btn-primary-bg: linear-gradient(135deg, #004400, #002200);
+  --btn-primary-bg-hover: linear-gradient(135deg, #008800, #004400);
+  --btn-primary-text: #00ff00;
+  --btn-primary-border: #00ff00;
+
+  --decor-corner: "+";
+
+  --bg-texture: none;
+  --bg-texture-card: none;
+}
+
+/* CRT scanlines */
+.theme-retro-green {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 0, 0.03) 2px,
+    rgba(0, 255, 0, 0.03) 4px
+  );
+}
+
+/* Phosphor glow */
+.theme-retro-green .scroll-card {
+  border-radius: 0;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.1);
+}
+
+.theme-retro-green h1,
+.theme-retro-green .text-accent,
+.theme-retro-green .font-display {
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.theme-retro-green input.rpg-input:focus,
+.theme-retro-green textarea.rpg-input:focus {
+  box-shadow: 0 0 0 1px #00ff00, 0 0 12px rgba(0, 255, 0, 0.4);
+}

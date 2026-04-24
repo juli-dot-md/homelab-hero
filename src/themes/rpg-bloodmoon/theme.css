@@ -1,0 +1,52 @@
+.theme-rpg-bloodmoon {
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0c0404;
+  --color-bg-card: rgba(28, 6, 6, 0.7);
+  --color-bg-input: rgba(18, 3, 3, 0.85);
+  --color-bg-card-inner: rgba(180, 30, 30, 0.08);
+
+  --color-text-base: #f0e0d8;
+  --color-text-muted: #b87878;
+  --color-text-faint: #6a2828;
+
+  --color-accent: #cc2222;
+  --color-accent-dim: #881414;
+  --color-accent-glow: rgba(204, 34, 34, 0.2);
+  --color-accent-glow-strong: rgba(204, 34, 34, 0.4);
+
+  --color-danger: #e8b878;
+  --color-danger-dim: #a87838;
+  --color-danger-bg: rgba(232, 184, 120, 0.12);
+
+  --color-border: #881414;
+  --color-border-focus: #cc2222;
+
+  --btn-primary-bg: linear-gradient(135deg, #881414, #580808);
+  --btn-primary-bg-hover: linear-gradient(135deg, #cc2222, #881414);
+  --btn-primary-text: #f0e0d8;
+  --btn-primary-border: #cc2222;
+
+  --decor-corner: "☽";
+
+  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(180, 20, 20, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(120, 10, 10, 0.07) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(
+      ellipse at 10% 90%,
+      rgba(180, 20, 20, 0.07) 0%,
+      transparent 50%
+    ), radial-gradient(ellipse at 90% 10%, rgba(120, 10, 10, 0.05) 0%, transparent 50%);
+}
+
+.theme-rpg-bloodmoon .scroll-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+  opacity: 0.5;
+}

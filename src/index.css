@@ -4,9 +4,26 @@
 @import "./themes/rpg-epic/theme.css";
 @import "./themes/rpg-necromancer/theme.css";
 @import "./themes/rpg-cosy/theme.css";
+@import "./themes/rpg-woods/theme.css";
+@import "./themes/rpg-highcourt/theme.css";
+@import "./themes/rpg-bloodmoon/theme.css";
+@import "./themes/rpg-dwarven/theme.css";
 @import "./themes/scifi-utopia/theme.css";
 @import "./themes/scifi-cyberpunk/theme.css";
 @import "./themes/scifi-grimdark/theme.css";
+@import "./themes/scifi-scrapyard/theme.css";
+@import "./themes/scifi-hightech/theme.css";
+@import "./themes/scifi-glados/theme.css";
+@import "./themes/scifi-solarpunk/theme.css";
+@import "./themes/scifi-ironman/theme.css";
+@import "./themes/retro-green/theme.css";
+@import "./themes/retro-amber/theme.css";
+@import "./themes/clean-minimal/theme.css";
+@import "./themes/clean-slate/theme.css";
+@import "./themes/catppuccin-latte/theme.css";
+@import "./themes/catppuccin-frappe/theme.css";
+@import "./themes/catppuccin-macchiato/theme.css";
+@import "./themes/catppuccin-mocha/theme.css";
 
 /* ============================================================
    BASE STYLES — consume CSS vars only, no hardcoded colours
@@ -193,14 +210,26 @@ textarea.rpg-input::placeholder {
 }
 
 /* Semantic colour helpers */
-.text-accent  { color: var(--color-accent); }
-.text-muted   { color: var(--color-text-muted); }
-.text-faint   { color: var(--color-text-faint); }
+.text-accent {
+  color: var(--color-accent);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-faint {
+  color: var(--color-text-faint);
+}
 
 /* Font helpers */
-.font-display { font-family: var(--font-display); }
-.font-body    { font-family: var(--font-body); }
-.font-mono    { font-family: var(--font-mono); }
+.font-display {
+  font-family: var(--font-display);
+}
+.font-body {
+  font-family: var(--font-body);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
 
 /* ============================================================
    THEME PICKER SELECT
@@ -521,8 +550,12 @@ textarea.rpg-input::placeholder {
 }
 
 /* Desktop sidebar docs visible, inline docs hidden */
-.landing-docs-desktop { display: none; }
-.landing-docs-mobile  { display: block; }
+.landing-docs-desktop {
+  display: none;
+}
+.landing-docs-mobile {
+  display: block;
+}
 
 @media (min-width: 1024px) {
   .landing-layout {
@@ -548,5 +581,7 @@ textarea.rpg-input::placeholder {
   }
 
   /* Hide inline docs on desktop */
-  .landing-docs-mobile { display: none; }
+  .landing-docs-mobile {
+    display: none;
+  }
 }

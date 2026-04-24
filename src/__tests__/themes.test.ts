@@ -15,16 +15,16 @@ const STAT_KEYS = [
 ] as const;
 
 describe("theme registry", () => {
-  it("has exactly 6 themes", () => {
-    expect(themeIds.length).toBe(6);
+  it("has exactly 23 themes", () => {
+    expect(themeIds.length).toBe(23);
   });
 
   it("default theme exists", () => {
     expect(themes[defaultTheme]).toBeDefined();
   });
 
-  it("has 2 categories", () => {
-    expect(categories.length).toBe(2);
+  it("has 4 categories", () => {
+    expect(categories.length).toBe(4);
   });
 
   it("all category themeIds exist in the registry", () => {

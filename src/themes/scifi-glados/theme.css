@@ -1,0 +1,50 @@
+.theme-scifi-glados {
+  --font-display: "Share Tech Mono", monospace;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0a0c0a;
+  --color-bg-card: rgba(18, 22, 18, 0.8);
+  --color-bg-input: rgba(10, 14, 10, 0.9);
+  --color-bg-card-inner: rgba(255, 130, 0, 0.06);
+
+  --color-text-base: #e8ece8;
+  --color-text-muted: #8a988a;
+  --color-text-faint: #4a544a;
+
+  --color-accent: #ff8200;
+  --color-accent-dim: #b85800;
+  --color-accent-glow: rgba(255, 130, 0, 0.15);
+  --color-accent-glow-strong: rgba(255, 130, 0, 0.35);
+
+  --color-danger: #cc2222;
+  --color-danger-dim: #881010;
+  --color-danger-bg: rgba(204, 34, 34, 0.1);
+
+  --color-border: #2a322a;
+  --color-border-focus: #ff8200;
+
+  --btn-primary-bg: linear-gradient(135deg, #b85800, #7a3000);
+  --btn-primary-bg-hover: linear-gradient(135deg, #ff8200, #b85800);
+  --btn-primary-text: #0a0c0a;
+  --btn-primary-border: #ff8200;
+
+  --decor-corner: "◉";
+
+  --bg-texture: radial-gradient(ellipse at 50% 50%, rgba(255, 130, 0, 0.04) 0%, transparent 70%);
+  --bg-texture-card: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 130, 0, 0.03) 0%,
+    transparent 60%
+  );
+}
+
+/* Clinical sharp corners */
+.theme-scifi-glados .scroll-card,
+.theme-scifi-glados input.rpg-input,
+.theme-scifi-glados textarea.rpg-input,
+.theme-scifi-glados .btn-primary,
+.theme-scifi-glados .btn-ghost,
+.theme-scifi-glados .btn-danger {
+  border-radius: 0;
+}

@@ -1,0 +1,62 @@
+.theme-scifi-ironman {
+  --font-display: "Exo 2", sans-serif;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #080c10;
+  --color-bg-card: rgba(12, 18, 26, 0.78);
+  --color-bg-input: rgba(6, 10, 16, 0.9);
+  --color-bg-card-inner: rgba(0, 212, 255, 0.06);
+
+  --color-text-base: #d8eeff;
+  --color-text-muted: #5888aa;
+  --color-text-faint: #284460;
+
+  --color-accent: #00d4ff;
+  --color-accent-dim: #0088bb;
+  --color-accent-glow: rgba(0, 212, 255, 0.18);
+  --color-accent-glow-strong: rgba(0, 212, 255, 0.4);
+
+  --color-danger: #d4a843;
+  --color-danger-dim: #a07820;
+  --color-danger-bg: rgba(212, 168, 67, 0.12);
+
+  --color-border: #0a3858;
+  --color-border-focus: #00d4ff;
+
+  --btn-primary-bg: linear-gradient(135deg, #0088bb, #004878);
+  --btn-primary-bg-hover: linear-gradient(135deg, #00d4ff, #0088bb);
+  --btn-primary-text: #080c10;
+  --btn-primary-border: #00d4ff;
+
+  --decor-corner: "◈";
+
+  --bg-texture: radial-gradient(ellipse at 50% 50%, rgba(0, 180, 255, 0.06) 0%, transparent 65%),
+    radial-gradient(ellipse at 20% 80%, rgba(212, 168, 67, 0.04) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(
+      ellipse at 10% 90%,
+      rgba(0, 180, 255, 0.05) 0%,
+      transparent 50%
+    ), radial-gradient(ellipse at 90% 10%, rgba(212, 168, 67, 0.03) 0%, transparent 50%);
+}
+
+.theme-scifi-ironman .scroll-card {
+  border-radius: 2px;
+  border-color: #0a3858;
+}
+
+.theme-scifi-ironman .scroll-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #00d4ff, #d4a843, #00d4ff, transparent);
+  opacity: 0.7;
+}
+
+.theme-scifi-ironman input.rpg-input:focus,
+.theme-scifi-ironman textarea.rpg-input:focus {
+  box-shadow: 0 0 0 1px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.3);
+}

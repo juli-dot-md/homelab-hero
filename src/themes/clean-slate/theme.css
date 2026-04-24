@@ -1,0 +1,69 @@
+.theme-clean-slate {
+  --font-display: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0f1117;
+  --color-bg-card: #1a1d27;
+  --color-bg-input: #141720;
+  --color-bg-card-inner: rgba(99, 102, 241, 0.06);
+
+  --color-text-base: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-text-faint: #475569;
+
+  --color-accent: #6366f1;
+  --color-accent-dim: #4338ca;
+  --color-accent-glow: rgba(99, 102, 241, 0.18);
+  --color-accent-glow-strong: rgba(99, 102, 241, 0.38);
+
+  --color-danger: #f43f5e;
+  --color-danger-dim: #be123c;
+  --color-danger-bg: rgba(244, 63, 94, 0.1);
+
+  --color-border: #1e2030;
+  --color-border-focus: #6366f1;
+
+  --btn-primary-bg: linear-gradient(135deg, #4338ca, #3730a3);
+  --btn-primary-bg-hover: linear-gradient(135deg, #6366f1, #4338ca);
+  --btn-primary-text: #ffffff;
+  --btn-primary-border: #6366f1;
+
+  --decor-corner: "";
+
+  --bg-texture: none;
+  --bg-texture-card: none;
+}
+
+.theme-clean-slate .scroll-card {
+  border-radius: 8px;
+  border-color: #1e2030;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.theme-clean-slate .scroll-card::before {
+  display: none;
+}
+
+.theme-clean-slate .btn-primary,
+.theme-clean-slate .btn-ghost,
+.theme-clean-slate .btn-danger {
+  border-radius: 6px;
+}
+
+.theme-clean-slate input.rpg-input,
+.theme-clean-slate textarea.rpg-input {
+  border-radius: 6px;
+  border-color: #1e2030;
+}
+
+.theme-clean-slate .section-header {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.7rem;
+}
+
+.theme-clean-slate .corner-ornament::before,
+.theme-clean-slate .corner-ornament::after {
+  display: none;
+}
