@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { SharePanel } from "../components/SharePanel";
-import { ThemePicker } from "../components/ThemePicker";
+import { useLocation } from "react-router-dom";
 import { Tooltip } from "../components/Tooltip";
-import { useSheetStore } from "../store";
 import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
-import type { StatKey } from "../types";
-import { getBaseUrl } from "../utils";
+import type { HomelabSheet, StatKey } from "../types";
+import { importMarkdown, parseShareUrl } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -20,28 +17,18 @@ const STAT_KEYS: StatKey[] = [
   "deployment",
 ];
 
-function StatBlock({
-  label,
-  value,
-  tooltipDescription,
-}: {
-  label: string;
-  value: string;
-  tooltipDescription?: string;
-}) {
+type State =
+  | { status: "loading" }
+  | { status: "error"; message: string }
+  | { status: "ready"; sheet: HomelabSheet };
+
+function StatBlock({ label, value, statKey }: { label: string; value: string; statKey: StatKey }) {
   if (!value) return null;
   return (
     <div className="scroll-card">
       <div className="relative z-10">
-        <div
-          className="font-display text-accent uppercase tracking-widest mb-1"
-          style={{ fontSize: "0.65rem" }}
-        >
-          {tooltipDescription ? (
-            <Tooltip description={tooltipDescription}>{label}</Tooltip>
-          ) : (
-            label
-          )}
+        <div className="font-display text-accent uppercase tracking-widest mb-1" style={{ fontSize: "0.65rem" }}>
+          <Tooltip description={descriptions.stats[statKey]}>{label}</Tooltip>
         </div>
         <div className="font-body text-[color:var(--color-text-base)] text-lg">{value}</div>
       </div>
@@ -52,10 +39,7 @@ function StatBlock({
 function ComponentBlock({ name, description }: { name: string; description: string }) {
   return (
     <div className="border-l-2 pl-4 py-1" style={{ borderColor: "var(--color-border)" }}>
-      <div
-        className="font-display text-[color:var(--color-text-base)] font-semibold"
-        style={{ fontSize: "0.85rem" }}
-      >
+      <div className="font-display text-[color:var(--color-text-base)] font-semibold" style={{ fontSize: "0.85rem" }}>
         {name}
       </div>
       {description && (
@@ -65,23 +49,59 @@ function ComponentBlock({ name, description }: { name: string; description: stri
   );
 }
 
-export function ViewPage() {
-  const navigate = useNavigate();
-  const { sheet, loadFromStorage } = useSheetStore();
+export function SharePage() {
+  const location = useLocation();
   const { theme } = useTheme();
-  const { t, icons } = theme;
-  const [showShare, setShowShare] = useState(false);
+  const { t } = theme;
+  const [state, setState] = useState<State>({ status: "loading" });
 
   useEffect(() => {
-    if (!sheet) loadFromStorage();
-  }, [sheet, loadFromStorage]);
+    const src = parseShareUrl(location.search);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("homelab-hero-sheet");
-    if (!sheet && !stored) navigate("/");
-  }, [sheet, navigate]);
+    if (!src) {
+      setState({
+        status: "error",
+        message: "No source URL provided. This share link appears to be invalid.",
+      });
+      return;
+    }
 
-  if (!sheet) {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const res = await fetch(src!);
+        if (!res.ok) {
+          if (!cancelled) setState({
+            status: "error",
+            message: `Could not load the file (HTTP ${res.status}). Make sure the URL is public and returns a raw file.`,
+          });
+          return;
+        }
+        const text = await res.text();
+        const result = importMarkdown(text);
+        if (!result.success) {
+          if (!cancelled) setState({
+            status: "error",
+            message: "The file loaded but could not be parsed as a Homelab Hero sheet.",
+          });
+          return;
+        }
+        if (!cancelled) setState({ status: "ready", sheet: result.data });
+      } catch {
+        if (!cancelled) setState({
+          status: "error",
+          message:
+            "Could not fetch the file. This is usually a CORS issue — make sure you're using a raw public URL (e.g. raw.githubusercontent.com, not a GitHub HTML page).",
+        });
+      }
+    }
+
+    load();
+    return () => { cancelled = true; };
+  }, [location.search]);
+
+  if (state.status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="font-display text-accent text-sm">{t.loading}</p>
@@ -89,28 +109,30 @@ export function ViewPage() {
     );
   }
 
+  if (state.status === "error") {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="scroll-card max-w-lg w-full" role="alert">
+          <div className="relative z-10">
+            <p className="font-display text-accent text-sm uppercase tracking-wider mb-3">
+              Could not load sheet
+            </p>
+            <p className="font-body text-muted text-base">{state.message}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { sheet } = state;
   const filledStats = STAT_KEYS.filter((k) => sheet.stats[k]);
   const hasHardware = sheet.hardware.length > 0;
   const hasServices = sheet.services.length > 0;
   const hasCustomFields = sheet.customFields.length > 0;
 
   return (
-    <>
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        {/* Toolbar */}
-        <div className="flex items-center justify-between mb-8 gap-2 flex-wrap">
-          <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/edit")}>
-            {icons.back} Edit
-          </button>
-          <div className="flex gap-2 items-center">
-            <ThemePicker />
-            <button type="button" className="btn-primary" onClick={() => setShowShare(true)}>
-              {icons.preview} Share
-            </button>
-          </div>
-        </div>
-
         {/* Sheet Header */}
         <div className="text-center mb-8">
           <p
@@ -121,6 +143,7 @@ export function ViewPage() {
           </p>
           <h1
             className="font-display text-accent font-bold mb-4"
+            role="heading"
             style={{ fontSize: "clamp(2rem, 6vw, 3rem)" }}
           >
             {sheet.name}
@@ -147,7 +170,7 @@ export function ViewPage() {
                   key={key}
                   label={t.stats[key].label}
                   value={sheet.stats[key]}
-                  tooltipDescription={descriptions.stats[key]}
+                  statKey={key}
                 />
               ))}
             </div>
@@ -164,7 +187,14 @@ export function ViewPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {sheet.customFields.map((field) => (
-                <StatBlock key={field.id} label={field.label} value={field.value} />
+                <div key={field.id} className="scroll-card">
+                  <div className="relative z-10">
+                    <div className="font-display text-accent uppercase tracking-widest mb-1" style={{ fontSize: "0.65rem" }}>
+                      {field.label}
+                    </div>
+                    <div className="font-body text-[color:var(--color-text-base)] text-lg">{field.value}</div>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
@@ -204,21 +234,10 @@ export function ViewPage() {
         )}
 
         <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>
-        <p
-          className="font-mono text-center text-faint opacity-40"
-          style={{ fontSize: "0.65rem" }}
-        >
-          {sheet.id} · {new Date(sheet.updatedAt).toLocaleDateString()}
+        <p className="font-mono text-center text-faint opacity-40" style={{ fontSize: "0.65rem" }}>
+          {sheet.id}
         </p>
       </div>
     </div>
-
-    {showShare && (
-      <SharePanel
-        baseUrl={getBaseUrl()}
-        onClose={() => setShowShare(false)}
-      />
-    )}
-    </>
   );
 }

@@ -4,6 +4,8 @@ import { themeIds } from "../themes";
 import type { ThemeId } from "../themes/types";
 import { HomelabSheetSchema } from "../types";
 export { hasContent } from "./hasContent";
+export { buildShareUrl, parseShareUrl } from "./shareUrl";
+export { getBaseUrl } from "./config";
 import type { HomelabSheet, StatKey } from "../types";
 
 // ---------------------------------------------------------------------------
