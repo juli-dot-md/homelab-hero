@@ -27,7 +27,9 @@ Sheets are stored as plain `.md` files with YAML frontmatter. To share:
 2. Host the `.md` file publicly — **GitHub Gist** is the easiest (no repo, just paste and click Raw)
 3. On the Preview page, click **Share**, paste the raw URL, copy the generated link
 
-The share link fetches the file via a CORS proxy (`corsproxy.io` by default, configurable via `VITE_CORS_PROXY_URL`) and renders it client-side. Any public URL works — GitHub Gist, raw GitHub, Pastebin, paste.ee, etc.
+The share link fetches the file via a CORS proxy and renders it client-side. Any public URL works — GitHub Gist, raw GitHub, Pastebin, paste.ee, etc.
+
+> **Proxy notice:** remote files are fetched through [corsproxy.io](https://corsproxy.io) by default. The requested URL is sent to their service. You can self-host or swap the proxy by setting `VITE_CORS_PROXY_URL` in your repo variables.
 
 ---
 
