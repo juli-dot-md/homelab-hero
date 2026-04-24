@@ -1,0 +1,38 @@
+.theme-rpg-epic {
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #1a1209;
+  --color-bg-card: rgba(26, 18, 9, 0.5);
+  --color-bg-input: rgba(26, 18, 9, 0.6);
+  --color-bg-card-inner: rgba(212, 168, 67, 0.12);
+
+  --color-text-base: #f5ead8;
+  --color-text-muted: #b8a080;
+  --color-text-faint: #9a7020;
+
+  --color-accent: #d4a843;
+  --color-accent-dim: #9a7020;
+  --color-accent-glow: rgba(212, 168, 67, 0.2);
+  --color-accent-glow-strong: rgba(212, 168, 67, 0.4);
+
+  --color-danger: #c0392b;
+  --color-danger-dim: #a93226;
+  --color-danger-bg: rgba(192, 57, 43, 0.15);
+
+  --color-border: #9a7020;
+  --color-border-focus: #d4a843;
+
+  --btn-primary-bg: linear-gradient(135deg, #b8892a, #9a7020);
+  --btn-primary-bg-hover: linear-gradient(135deg, #d4a843, #b8892a);
+  --btn-primary-text: #1a1209;
+  --btn-primary-border: #d4a843;
+
+  --decor-corner: "✦";
+
+  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(180, 140, 80, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(160, 120, 60, 0.1) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(ellipse at 10% 90%, rgba(180, 140, 80, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(180, 140, 80, 0.06) 0%, transparent 50%);
+}

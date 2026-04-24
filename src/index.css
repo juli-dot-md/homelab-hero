@@ -1,161 +1,15 @@
 @import "tailwindcss";
 
-/* ============================================================
-   THEME CONTRACT
-   All theme-specific values go through these CSS custom props.
-   Each .theme-* class overrides this full set.
-   ============================================================ */
-:root {
-  /* Fonts */
-  --font-display: "Cinzel", serif;
-  --font-body: "Crimson Text", serif;
-  --font-mono: "JetBrains Mono", monospace;
-
-  /* Surface colors */
-  --color-bg: #1a1209;
-  --color-bg-card: rgba(26, 18, 9, 0.5);
-  --color-bg-input: rgba(26, 18, 9, 0.6);
-  --color-bg-card-inner: rgba(212, 168, 67, 0.12);
-
-  /* Text colors */
-  --color-text-base: #f5ead8;
-  --color-text-muted: #b8a080;
-  --color-text-faint: #9a7020;
-
-  /* Accent / primary */
-  --color-accent: #d4a843;
-  --color-accent-dim: #9a7020;
-  --color-accent-glow: rgba(212, 168, 67, 0.2);
-  --color-accent-glow-strong: rgba(212, 168, 67, 0.4);
-
-  /* Danger */
-  --color-danger: #c0392b;
-  --color-danger-dim: #a93226;
-  --color-danger-bg: rgba(192, 57, 43, 0.15);
-
-  /* Borders */
-  --color-border: #9a7020;
-  --color-border-focus: #d4a843;
-
-  /* Button primary */
-  --btn-primary-bg: linear-gradient(135deg, #b8892a, #9a7020);
-  --btn-primary-bg-hover: linear-gradient(135deg, #d4a843, #b8892a);
-  --btn-primary-text: #1a1209;
-  --btn-primary-border: #d4a843;
-
-  /* Decorative */
-  --decor-corner: "✦";
-  --decor-divider-char: "◆";
-
-  /* Background texture */
-  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(180, 140, 80, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(160, 120, 60, 0.1) 0%, transparent 50%);
-  --bg-texture-card: radial-gradient(
-      ellipse at 10% 90%,
-      rgba(180, 140, 80, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(ellipse at 90% 10%, rgba(180, 140, 80, 0.06) 0%, transparent 50%);
-}
+/* Per-theme CSS custom property blocks */
+@import "./themes/rpg-epic/theme.css";
+@import "./themes/rpg-necromancer/theme.css";
+@import "./themes/rpg-cosy/theme.css";
+@import "./themes/scifi-utopia/theme.css";
+@import "./themes/scifi-cyberpunk/theme.css";
+@import "./themes/scifi-grimdark/theme.css";
 
 /* ============================================================
-   RPG / FANTASY THEME (default)
-   ============================================================ */
-.theme-rpg {
-  --font-display: "Cinzel", serif;
-  --font-body: "Crimson Text", serif;
-  --font-mono: "JetBrains Mono", monospace;
-
-  --color-bg: #1a1209;
-  --color-bg-card: rgba(26, 18, 9, 0.5);
-  --color-bg-input: rgba(26, 18, 9, 0.6);
-  --color-bg-card-inner: rgba(212, 168, 67, 0.12);
-
-  --color-text-base: #f5ead8;
-  --color-text-muted: #b8a080;
-  --color-text-faint: #9a7020;
-
-  --color-accent: #d4a843;
-  --color-accent-dim: #9a7020;
-  --color-accent-glow: rgba(212, 168, 67, 0.2);
-  --color-accent-glow-strong: rgba(212, 168, 67, 0.4);
-
-  --color-danger: #c0392b;
-  --color-danger-dim: #a93226;
-  --color-danger-bg: rgba(192, 57, 43, 0.15);
-
-  --color-border: #9a7020;
-  --color-border-focus: #d4a843;
-
-  --btn-primary-bg: linear-gradient(135deg, #b8892a, #9a7020);
-  --btn-primary-bg-hover: linear-gradient(135deg, #d4a843, #b8892a);
-  --btn-primary-text: #1a1209;
-  --btn-primary-border: #d4a843;
-
-  --decor-corner: "✦";
-
-  --bg-texture: radial-gradient(
-      ellipse at 20% 20%,
-      rgba(180, 140, 80, 0.15) 0%,
-      transparent 60%
-    ),
-    radial-gradient(ellipse at 80% 80%, rgba(160, 120, 60, 0.1) 0%, transparent 50%);
-  --bg-texture-card: radial-gradient(
-      ellipse at 10% 90%,
-      rgba(180, 140, 80, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(ellipse at 90% 10%, rgba(180, 140, 80, 0.06) 0%, transparent 50%);
-}
-
-/* ============================================================
-   SCI-FI THEME
-   ============================================================ */
-.theme-scifi {
-  --font-display: "Share Tech Mono", monospace;
-  --font-body: "Exo 2", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-
-  --color-bg: #050d1a;
-  --color-bg-card: rgba(0, 20, 45, 0.7);
-  --color-bg-input: rgba(0, 10, 30, 0.8);
-  --color-bg-card-inner: rgba(0, 200, 255, 0.06);
-
-  --color-text-base: #c8e8ff;
-  --color-text-muted: #6a9ab8;
-  --color-text-faint: #2a5a7a;
-
-  --color-accent: #00c8ff;
-  --color-accent-dim: #0077aa;
-  --color-accent-glow: rgba(0, 200, 255, 0.15);
-  --color-accent-glow-strong: rgba(0, 200, 255, 0.35);
-
-  --color-danger: #ff3a5c;
-  --color-danger-dim: #cc2244;
-  --color-danger-bg: rgba(255, 58, 92, 0.12);
-
-  --color-border: #0077aa;
-  --color-border-focus: #00c8ff;
-
-  --btn-primary-bg: linear-gradient(135deg, #0077aa, #004466);
-  --btn-primary-bg-hover: linear-gradient(135deg, #00c8ff, #0077aa);
-  --btn-primary-text: #050d1a;
-  --btn-primary-border: #00c8ff;
-
-  --decor-corner: "◈";
-
-  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(0, 100, 200, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(0, 200, 255, 0.06) 0%, transparent 50%);
-  --bg-texture-card: radial-gradient(
-      ellipse at 10% 90%,
-      rgba(0, 100, 200, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(ellipse at 90% 10%, rgba(0, 200, 255, 0.05) 0%, transparent 50%);
-}
-
-/* ============================================================
-   BASE STYLES — theme-agnostic, consume vars only
+   BASE STYLES — consume CSS vars only, no hardcoded colours
    ============================================================ */
 * {
   box-sizing: border-box;
@@ -170,20 +24,8 @@ body {
   min-height: 100vh;
 }
 
-/* Scan-line overlay for sci-fi */
-.theme-scifi body,
-.theme-scifi .theme-root {
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 200, 255, 0.015) 2px,
-    rgba(0, 200, 255, 0.015) 4px
-  );
-}
-
 /* ============================================================
-   COMPONENT CLASSES — consume vars only, no hardcoded colors
+   SHARED COMPONENT CLASSES
    ============================================================ */
 
 .divider-rune {
@@ -239,8 +81,9 @@ textarea.rpg-input:focus {
 
 input.rpg-input::placeholder,
 textarea.rpg-input::placeholder {
-  color: var(--color-accent-glow-strong);
+  color: var(--color-text-faint);
   font-style: italic;
+  opacity: 0.8;
 }
 
 .rpg-textarea {
@@ -326,18 +169,6 @@ textarea.rpg-input::placeholder {
   pointer-events: none;
 }
 
-/* Sci-fi gets a top accent line instead of inner border */
-.theme-scifi .scroll-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
-  opacity: 0.6;
-}
-
 .corner-ornament {
   position: relative;
 }
@@ -361,38 +192,48 @@ textarea.rpg-input::placeholder {
   right: 0.5rem;
 }
 
-/* Themed text helpers */
-.text-accent {
+/* Semantic colour helpers */
+.text-accent  { color: var(--color-accent); }
+.text-muted   { color: var(--color-text-muted); }
+.text-faint   { color: var(--color-text-faint); }
+
+/* Font helpers */
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+.font-mono    { font-family: var(--font-mono); }
+
+/* ============================================================
+   THEME PICKER SELECT
+   ============================================================ */
+.theme-select {
+  appearance: none;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
   color: var(--color-accent);
-}
-
-.text-muted {
-  color: var(--color-text-muted);
-}
-
-.text-faint {
-  color: var(--color-text-faint);
-}
-
-.font-display {
+  cursor: pointer;
   font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 1.8rem 0.3rem 0.7rem;
+  text-transform: uppercase;
+  transition: border-color 0.15s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4a843' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
 }
 
-.font-body {
-  font-family: var(--font-body);
+.theme-select:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 2px var(--color-accent-glow);
+  outline: none;
 }
 
-.font-mono {
-  font-family: var(--font-mono);
-}
-
-/* Sci-fi: cursor blink on inputs */
-.theme-scifi input.rpg-input:focus,
-.theme-scifi textarea.rpg-input:focus {
-  box-shadow: 0 0 0 2px var(--color-accent-glow), 0 0 20px var(--color-accent-glow);
-}
-
-/* Sci-fi: scanline on cards */
-.theme-scifi .scroll-card {
-  border-radius: 0;
+.theme-select option,
+.theme-select optgroup {
+  background: #1a1209;
+  color: #f5ead8;
+  font-family: sans-serif;
+  font-size: 0.85rem;
 }

@@ -1,0 +1,50 @@
+.theme-rpg-necromancer {
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #080410;
+  --color-bg-card: rgba(20, 8, 35, 0.7);
+  --color-bg-input: rgba(10, 4, 20, 0.8);
+  --color-bg-card-inner: rgba(74, 222, 128, 0.08);
+
+  --color-text-base: #d4f5d4;
+  --color-text-muted: #7aaa7a;
+  --color-text-faint: #3a6a4a;
+
+  --color-accent: #4ade80;
+  --color-accent-dim: #22863a;
+  --color-accent-glow: rgba(74, 222, 128, 0.15);
+  --color-accent-glow-strong: rgba(74, 222, 128, 0.35);
+
+  --color-danger: #c084fc;
+  --color-danger-dim: #7c3aed;
+  --color-danger-bg: rgba(192, 132, 252, 0.12);
+
+  --color-border: #22863a;
+  --color-border-focus: #4ade80;
+
+  --btn-primary-bg: linear-gradient(135deg, #22863a, #14532d);
+  --btn-primary-bg-hover: linear-gradient(135deg, #4ade80, #22863a);
+  --btn-primary-text: #080410;
+  --btn-primary-border: #4ade80;
+
+  --decor-corner: "☽";
+
+  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(74, 222, 128, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(ellipse at 10% 90%, rgba(74, 222, 128, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(124, 58, 237, 0.04) 0%, transparent 50%);
+}
+
+/* Eerie green glow on headings */
+.theme-rpg-necromancer h1,
+.theme-rpg-necromancer .text-accent {
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+}
+
+/* Purple tint on danger (remove) buttons */
+.theme-rpg-necromancer .btn-danger {
+  color: var(--color-danger);
+  border-color: var(--color-danger-dim);
+}

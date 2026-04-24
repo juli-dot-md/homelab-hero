@@ -1,0 +1,83 @@
+.theme-scifi-cyberpunk {
+  --font-display: "Share Tech Mono", monospace;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0d0010;
+  --color-bg-card: rgba(30, 0, 40, 0.75);
+  --color-bg-input: rgba(15, 0, 25, 0.85);
+  --color-bg-card-inner: rgba(247, 37, 133, 0.07);
+
+  --color-text-base: #f8d0ff;
+  --color-text-muted: #b060c8;
+  --color-text-faint: #602878;
+
+  --color-accent: #f72585;
+  --color-accent-dim: #9a1060;
+  --color-accent-glow: rgba(247, 37, 133, 0.18);
+  --color-accent-glow-strong: rgba(247, 37, 133, 0.4);
+
+  --color-danger: #00f5d4;
+  --color-danger-dim: #00a896;
+  --color-danger-bg: rgba(0, 245, 212, 0.1);
+
+  --color-border: #6a0a50;
+  --color-border-focus: #f72585;
+
+  --btn-primary-bg: linear-gradient(135deg, #9a1060, #6a0a50);
+  --btn-primary-bg-hover: linear-gradient(135deg, #f72585, #9a1060);
+  --btn-primary-text: #f8d0ff;
+  --btn-primary-border: #f72585;
+
+  --decor-corner: "◈";
+
+  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(247, 37, 133, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(114, 9, 183, 0.08) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(ellipse at 10% 90%, rgba(247, 37, 133, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(114, 9, 183, 0.05) 0%, transparent 50%);
+}
+
+/* Magenta scanlines */
+.theme-scifi-cyberpunk {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(247, 37, 133, 0.02) 2px,
+    rgba(247, 37, 133, 0.02) 4px
+  );
+}
+
+/* Sharp zero-radius cards with hot pink top bar */
+.theme-scifi-cyberpunk .scroll-card {
+  border-radius: 0;
+  border-color: #6a0a50;
+}
+
+.theme-scifi-cyberpunk .scroll-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+  opacity: 0.8;
+}
+
+/* Neon input glow */
+.theme-scifi-cyberpunk input.rpg-input:focus,
+.theme-scifi-cyberpunk textarea.rpg-input:focus {
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 16px var(--color-accent-glow-strong);
+}
+
+/* Cyan remove buttons (inverted danger colour) */
+.theme-scifi-cyberpunk .btn-danger {
+  color: var(--color-danger);
+  border-color: var(--color-danger-dim);
+}
+
+.theme-scifi-cyberpunk .btn-danger:hover {
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger);
+}

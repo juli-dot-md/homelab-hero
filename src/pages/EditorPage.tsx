@@ -49,13 +49,22 @@ export function EditorPage() {
     if (!sheet && !stored) navigate("/");
   }, [sheet, navigate]);
 
-  // Pick random placeholders once per session (stable across re-renders)
-  const statPlaceholders = useMemo(() => {
-    return Object.fromEntries(
+  // All random placeholders picked once per theme change
+  const ph = useMemo(() => ({
+    name: getRandomPlaceholder(t.fields.namePlaceholders),
+    backstory: getRandomPlaceholder(t.fields.backstoryPlaceholders),
+    hardwareName: getRandomPlaceholder(t.placeholders.hardwareName),
+    hardwareDescription: getRandomPlaceholder(t.placeholders.hardwareDescription),
+    skillName: getRandomPlaceholder(t.placeholders.skillName),
+    skillDescription: getRandomPlaceholder(t.placeholders.skillDescription),
+    customLabel: getRandomPlaceholder(t.placeholders.customLabel),
+    customValue: getRandomPlaceholder(t.placeholders.customValue),
+    stats: Object.fromEntries(
       STAT_KEYS.map((key) => [key, getRandomPlaceholder(t.stats[key].placeholders)])
-    ) as Record<StatKey, string>;
+    ) as Record<StatKey, string>,
+  // Re-randomise when theme changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme.id]); // re-randomise when theme changes
+  }), [theme.id]);
 
   if (!sheet) {
     return (
@@ -117,7 +126,7 @@ export function EditorPage() {
                 <input
                   type="text"
                   className="rpg-input text-xl"
-                  placeholder={t.fields.namePlaceholder}
+                  placeholder={ph.name}
                   value={sheet.name}
                   onChange={(e) => updateField("name", e.target.value)}
                 />
@@ -131,7 +140,7 @@ export function EditorPage() {
                 </label>
                 <textarea
                   className="rpg-input rpg-textarea"
-                  placeholder={t.fields.backstoryPlaceholder}
+                  placeholder={ph.backstory}
                   value={sheet.description}
                   onChange={(e) => updateField("description", e.target.value)}
                 />
@@ -154,7 +163,7 @@ export function EditorPage() {
                   <input
                     type="text"
                     className="rpg-input"
-                    placeholder={statPlaceholders[key]}
+                    placeholder={ph.stats[key]}
                     value={sheet.stats[key]}
                     onChange={(e) => updateStat(key, e.target.value)}
                   />
@@ -173,8 +182,8 @@ export function EditorPage() {
               onRemove={removeHardware}
               removeIcon={icons.remove}
               placeholder={{
-                name: t.placeholders.hardwareName,
-                description: t.placeholders.hardwareDescription,
+                name: ph.hardwareName,
+                description: ph.hardwareDescription,
               }}
             />
           </section>
@@ -189,8 +198,8 @@ export function EditorPage() {
               onRemove={removeService}
               removeIcon={icons.remove}
               placeholder={{
-                name: t.placeholders.skillName,
-                description: t.placeholders.skillDescription,
+                name: ph.skillName,
+                description: ph.skillDescription,
               }}
             />
           </section>
@@ -204,8 +213,8 @@ export function EditorPage() {
               onUpdate={updateCustomField}
               onRemove={removeCustomField}
               removeIcon={icons.remove}
-              labelPlaceholder={t.placeholders.customLabel}
-              valuePlaceholder={t.placeholders.customValue}
+              labelPlaceholder={ph.customLabel}
+              valuePlaceholder={ph.customValue}
             />
           </section>
         </div>

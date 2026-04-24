@@ -1,0 +1,80 @@
+.theme-scifi-grimdark {
+  --font-display: "Share Tech Mono", monospace;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0c0a08;
+  --color-bg-card: rgba(28, 18, 10, 0.8);
+  --color-bg-input: rgba(16, 10, 4, 0.9);
+  --color-bg-card-inner: rgba(194, 65, 12, 0.07);
+
+  --color-text-base: #e8d5b0;
+  --color-text-muted: #9a7a50;
+  --color-text-faint: #5a4020;
+
+  --color-accent: #c2410c;
+  --color-accent-dim: #7c2d12;
+  --color-accent-glow: rgba(194, 65, 12, 0.18);
+  --color-accent-glow-strong: rgba(194, 65, 12, 0.38);
+
+  --color-danger: #dc2626;
+  --color-danger-dim: #991b1b;
+  --color-danger-bg: rgba(220, 38, 38, 0.12);
+
+  --color-border: #5a3010;
+  --color-border-focus: #c2410c;
+
+  --btn-primary-bg: linear-gradient(135deg, #7c2d12, #5a1a06);
+  --btn-primary-bg-hover: linear-gradient(135deg, #c2410c, #7c2d12);
+  --btn-primary-text: #e8d5b0;
+  --btn-primary-border: #c2410c;
+
+  --decor-corner: "⚙";
+
+  --bg-texture: radial-gradient(ellipse at 20% 20%, rgba(194, 65, 12, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(120, 40, 8, 0.06) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(ellipse at 10% 90%, rgba(194, 65, 12, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(120, 40, 8, 0.04) 0%, transparent 50%);
+}
+
+/* Red-tinted scanlines */
+.theme-scifi-grimdark {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(194, 65, 12, 0.015) 3px,
+    rgba(194, 65, 12, 0.015) 4px
+  );
+}
+
+/* Brutal square cards with harsh border */
+.theme-scifi-grimdark .scroll-card {
+  border-radius: 0;
+  border-width: 1px;
+  border-color: #5a3010;
+}
+
+.theme-scifi-grimdark .scroll-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+  opacity: 0.6;
+}
+
+/* Harsh input focus */
+.theme-scifi-grimdark input.rpg-input:focus,
+.theme-scifi-grimdark textarea.rpg-input:focus {
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 8px var(--color-accent-glow);
+}
+
+/* Gear icon spin on corner ornaments (subtle) */
+.theme-scifi-grimdark .corner-ornament::before,
+.theme-scifi-grimdark .corner-ornament::after {
+  font-size: 0.75rem;
+  opacity: 0.4;
+}

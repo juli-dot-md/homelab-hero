@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { type ThemeId, defaultTheme, themeIds, themes } from "../themes";
+import { categories, defaultTheme, themeIds, themes } from "../themes";
+import type { ThemeId } from "../themes/types";
 
 const STAT_KEYS = [
   "scalability",
@@ -12,15 +13,37 @@ const STAT_KEYS = [
   "deployment",
 ] as const;
 
-describe("theme definitions", () => {
-  it("has at least two themes", () => {
-    expect(themeIds.length).toBeGreaterThanOrEqual(2);
+describe("theme registry", () => {
+  it("has exactly 6 themes", () => {
+    expect(themeIds.length).toBe(6);
   });
 
   it("default theme exists", () => {
     expect(themes[defaultTheme]).toBeDefined();
   });
 
+  it("has 2 categories", () => {
+    expect(categories.length).toBe(2);
+  });
+
+  it("all category themeIds exist in the registry", () => {
+    for (const cat of categories) {
+      for (const id of cat.themeIds) {
+        expect(themes[id], `theme ${id} missing from registry`).toBeDefined();
+      }
+    }
+  });
+
+  it("every theme appears in exactly one category", () => {
+    const allCatIds = categories.flatMap((c) => c.themeIds);
+    expect(allCatIds.length).toBe(themeIds.length);
+    for (const id of themeIds) {
+      expect(allCatIds).toContain(id);
+    }
+  });
+});
+
+describe("individual themes", () => {
   for (const id of themeIds) {
     describe(`theme: ${id}`, () => {
       const theme = themes[id as ThemeId];
@@ -53,20 +76,20 @@ describe("theme definitions", () => {
         expect(t.sections.customFields).toBeTruthy();
       });
 
-      it("has all field labels", () => {
+      it("has all field labels and placeholder arrays", () => {
         expect(t.fields.name).toBeTruthy();
         expect(t.fields.backstory).toBeTruthy();
-        expect(t.fields.namePlaceholder).toBeTruthy();
-        expect(t.fields.backstoryPlaceholder).toBeTruthy();
+        expect(t.fields.namePlaceholders.length).toBeGreaterThanOrEqual(1);
+        expect(t.fields.backstoryPlaceholders.length).toBeGreaterThanOrEqual(1);
       });
 
-      it("has all placeholder strings", () => {
-        expect(t.placeholders.hardwareName).toBeTruthy();
-        expect(t.placeholders.hardwareDescription).toBeTruthy();
-        expect(t.placeholders.skillName).toBeTruthy();
-        expect(t.placeholders.skillDescription).toBeTruthy();
-        expect(t.placeholders.customLabel).toBeTruthy();
-        expect(t.placeholders.customValue).toBeTruthy();
+      it("has all placeholder arrays with at least one entry", () => {
+        expect(t.placeholders.hardwareName.length).toBeGreaterThanOrEqual(1);
+        expect(t.placeholders.hardwareDescription.length).toBeGreaterThanOrEqual(1);
+        expect(t.placeholders.skillName.length).toBeGreaterThanOrEqual(1);
+        expect(t.placeholders.skillDescription.length).toBeGreaterThanOrEqual(1);
+        expect(t.placeholders.customLabel.length).toBeGreaterThanOrEqual(1);
+        expect(t.placeholders.customValue.length).toBeGreaterThanOrEqual(1);
       });
 
       it("has all icons", () => {
@@ -88,7 +111,7 @@ describe("theme definitions", () => {
 
       describe("stats translations", () => {
         for (const key of STAT_KEYS) {
-          it(`has label and at least one placeholder for '${key}'`, () => {
+          it(`'${key}' has label and at least 1 placeholder`, () => {
             const stat = t.stats[key];
             expect(stat).toBeDefined();
             expect(stat.label).toBeTruthy();

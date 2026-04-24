@@ -1,0 +1,61 @@
+.theme-scifi-utopia {
+  --font-display: "Exo 2", sans-serif;
+  --font-body: "Exo 2", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-bg: #0a1628;
+  --color-bg-card: rgba(15, 30, 60, 0.7);
+  --color-bg-input: rgba(8, 20, 45, 0.8);
+  --color-bg-card-inner: rgba(52, 211, 153, 0.07);
+
+  --color-text-base: #e2f0f9;
+  --color-text-muted: #7aaabf;
+  --color-text-faint: #3a6a8a;
+
+  --color-accent: #34d399;
+  --color-accent-dim: #059669;
+  --color-accent-glow: rgba(52, 211, 153, 0.15);
+  --color-accent-glow-strong: rgba(52, 211, 153, 0.3);
+
+  --color-danger: #fb7185;
+  --color-danger-dim: #e11d48;
+  --color-danger-bg: rgba(251, 113, 133, 0.1);
+
+  --color-border: #1e4d6b;
+  --color-border-focus: #34d399;
+
+  --btn-primary-bg: linear-gradient(135deg, #059669, #047857);
+  --btn-primary-bg-hover: linear-gradient(135deg, #34d399, #059669);
+  --btn-primary-text: #0a1628;
+  --btn-primary-border: #34d399;
+
+  --decor-corner: "◇";
+
+  --bg-texture: radial-gradient(ellipse at 15% 15%, rgba(52, 211, 153, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(14, 165, 233, 0.06) 0%, transparent 50%);
+  --bg-texture-card: radial-gradient(ellipse at 10% 90%, rgba(52, 211, 153, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(14, 165, 233, 0.04) 0%, transparent 50%);
+}
+
+/* Clean sharp cards — utopia aesthetic */
+.theme-scifi-utopia .scroll-card {
+  border-radius: 4px;
+  border-top: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.theme-scifi-utopia .scroll-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+  opacity: 0.5;
+}
+
+/* Clean focus ring */
+.theme-scifi-utopia input.rpg-input:focus,
+.theme-scifi-utopia textarea.rpg-input:focus {
+  box-shadow: 0 0 0 2px var(--color-accent-glow), 0 0 12px var(--color-accent-glow);
+}
