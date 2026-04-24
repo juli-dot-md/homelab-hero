@@ -2,6 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { SharePage } from "../pages/SharePage";
+import { ThemeProvider } from "../themes/ThemeContext";
+import { themes } from "../themes";
 
 const VALID_MD = `---
 id: abc123
@@ -24,11 +26,13 @@ const RAW_URL = "https://raw.githubusercontent.com/mike/homelab/main/sheet.md";
 
 function renderSharePage(search: string) {
   return render(
-    <MemoryRouter initialEntries={[`/share${search}`]}>
-      <Routes>
-        <Route path="/share" element={<SharePage />} />
-      </Routes>
-    </MemoryRouter>
+    <ThemeProvider>
+      <MemoryRouter initialEntries={[`/share${search}`]}>
+        <Routes>
+          <Route path="/share" element={<SharePage />} />
+        </Routes>
+      </MemoryRouter>
+    </ThemeProvider>
   );
 }
 
@@ -121,5 +125,19 @@ describe("<SharePage>", () => {
       const alert = screen.getByRole("alert");
       expect(alert.textContent?.toLowerCase()).toMatch(/cors|raw|public/);
     });
+  });
+
+  it("applies the theme from the frontmatter after loading", async () => {
+    const scifiMd = VALID_MD.replace("theme: rpg-epic", "theme: scifi-cyberpunk");
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      text: async () => scifiMd,
+    } as Response);
+    renderSharePage(`?src=${encodeURIComponent(RAW_URL)}`);
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { name: "Mike's Homelab" })).toBeInTheDocument()
+    );
+    // The html element should have the cyberpunk theme class applied
+    expect(document.documentElement.classList.contains(themes["scifi-cyberpunk"].className)).toBe(true);
   });
 });

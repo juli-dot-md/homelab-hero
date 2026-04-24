@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Tooltip } from "../components/Tooltip";
 import { descriptions } from "../themes/descriptions";
+import { themes } from "../themes";
 import { useTheme } from "../themes/ThemeContext";
 import type { HomelabSheet, StatKey } from "../types";
 import { importMarkdown, parseShareUrl } from "../utils";
@@ -51,7 +52,7 @@ function ComponentBlock({ name, description }: { name: string; description: stri
 
 export function SharePage() {
   const location = useLocation();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { t } = theme;
   const [state, setState] = useState<State>({ status: "loading" });
 
@@ -87,7 +88,13 @@ export function SharePage() {
           });
           return;
         }
-        if (!cancelled) setState({ status: "ready", sheet: result.data });
+        if (!cancelled) {
+          // Apply theme from frontmatter if it's a known theme
+          if (result.themeId && result.themeId in themes) {
+            setTheme(result.themeId);
+          }
+          setState({ status: "ready", sheet: result.data });
+        }
       } catch {
         if (!cancelled) setState({
           status: "error",
