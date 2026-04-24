@@ -4,7 +4,9 @@
  */
 export function buildShareUrl(rawUrl: string, baseUrl: string): string {
   if (!rawUrl.trim()) return "";
-  const url = new URL("/share", baseUrl);
+  // Strip trailing slash from baseUrl so we can safely append /share
+  const base = baseUrl.replace(/\/$/, "");
+  const url = new URL(`${base}/share`);
   url.searchParams.set("src", rawUrl.trim());
   return url.toString();
 }

@@ -31,6 +31,8 @@ type SheetStore = {
   addCustomField: () => void;
   updateCustomField: (id: string, field: "label" | "value", value: string) => void;
   removeCustomField: (id: string) => void;
+
+  setImage: (dataUrl: string | null) => void;
 };
 
 function persist(sheet: HomelabSheet) {
@@ -178,6 +180,14 @@ export const useSheetStore = create<SheetStore>((set, get) => ({
       ...sheet,
       customFields: sheet.customFields.filter((f) => f.id !== id),
     };
+    persist(updated);
+    set({ sheet: updated, isDirty: true });
+  },
+
+  setImage: (dataUrl) => {
+    const { sheet } = get();
+    if (!sheet) return;
+    const updated = { ...sheet, image: dataUrl ?? undefined };
     persist(updated);
     set({ sheet: updated, isDirty: true });
   },

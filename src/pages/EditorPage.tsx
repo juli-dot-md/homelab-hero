@@ -1,17 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
-import { CustomFieldList } from "../components/CustomFieldList";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+import { CustomFieldList } from "../components/CustomFieldList";
 import { HowItWorks } from "../components/HowItWorks";
 import { MarkdownPanel } from "../components/MarkdownPanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
-import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
+import { descriptions } from "../themes/descriptions";
 import type { StatKey } from "../types";
-import { exportMarkdown, getRandomPlaceholder, hasContent } from "../utils";
+import { exportMarkdown, getRandomPlaceholder, hasContent, resizeImage } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -44,10 +44,23 @@ export function EditorPage() {
     addCustomField,
     updateCustomField,
     removeCustomField,
+    setImage,
   } = useSheetStore();
 
   const [showPanel, setShowPanel] = useState(false);
   const [showHomeConfirm, setShowHomeConfirm] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleImageFile(file: File) {
+    setImageError(null);
+    try {
+      const dataUrl = await resizeImage(file);
+      setImage(dataUrl);
+    } catch {
+      setImageError("Could not load image. Please try a different file.");
+    }
+  }
 
   function handleImport(markdown: string): boolean {
     const outcome = loadFromMarkdown(markdown);
@@ -69,21 +82,24 @@ export function EditorPage() {
   }, [sheet, navigate]);
 
   // All random placeholders picked once per theme change
-  const ph = useMemo(() => ({
-    name: getRandomPlaceholder(t.fields.namePlaceholders),
-    backstory: getRandomPlaceholder(t.fields.backstoryPlaceholders),
-    hardwareName: getRandomPlaceholder(t.placeholders.hardwareName),
-    hardwareDescription: getRandomPlaceholder(t.placeholders.hardwareDescription),
-    skillName: getRandomPlaceholder(t.placeholders.skillName),
-    skillDescription: getRandomPlaceholder(t.placeholders.skillDescription),
-    customLabel: getRandomPlaceholder(t.placeholders.customLabel),
-    customValue: getRandomPlaceholder(t.placeholders.customValue),
-    stats: Object.fromEntries(
-      STAT_KEYS.map((key) => [key, getRandomPlaceholder(t.stats[key].placeholders)])
-    ) as Record<StatKey, string>,
-  // Re-randomise when theme changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [theme.id]);
+  const ph = useMemo(
+    () => ({
+      name: getRandomPlaceholder(t.fields.namePlaceholders),
+      backstory: getRandomPlaceholder(t.fields.backstoryPlaceholders),
+      hardwareName: getRandomPlaceholder(t.placeholders.hardwareName),
+      hardwareDescription: getRandomPlaceholder(t.placeholders.hardwareDescription),
+      skillName: getRandomPlaceholder(t.placeholders.skillName),
+      skillDescription: getRandomPlaceholder(t.placeholders.skillDescription),
+      customLabel: getRandomPlaceholder(t.placeholders.customLabel),
+      customValue: getRandomPlaceholder(t.placeholders.customValue),
+      stats: Object.fromEntries(
+        STAT_KEYS.map((key) => [key, getRandomPlaceholder(t.stats[key].placeholders)])
+      ) as Record<StatKey, string>,
+      // Re-randomise when theme changes
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }),
+    [theme.id]
+  );
 
   if (!sheet) {
     return (
@@ -95,210 +111,295 @@ export function EditorPage() {
 
   return (
     <>
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 gap-2 flex-wrap">
-          <button
-            type="button"
-            className="btn-ghost text-xs"
-            onClick={() => {
-              if (sheet && hasContent(sheet)) {
-                setShowHomeConfirm(true);
-              } else {
-                navigate("/");
-              }
-            }}
-          >
-            {icons.back} Home
-          </button>
-          <div className="flex gap-2 items-center flex-wrap">
-            <ThemePicker />
-            <button type="button" className="btn-ghost" onClick={() => navigate("/view")}>
-              {icons.preview} Preview
-            </button>
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8 gap-2 flex-wrap">
             <button
               type="button"
-              className="btn-primary"
-              onClick={() => setShowPanel(true)}
+              className="btn-ghost text-xs"
+              onClick={() => {
+                if (sheet && hasContent(sheet)) {
+                  setShowHomeConfirm(true);
+                } else {
+                  navigate("/");
+                }
+              }}
             >
-              {icons.export} Markdown
+              {icons.back} Home
             </button>
+            <div className="flex gap-2 items-center flex-wrap">
+              <ThemePicker />
+              <button type="button" className="btn-ghost" onClick={() => navigate("/view")}>
+                {icons.preview} Preview
+              </button>
+              <button type="button" className="btn-primary" onClick={() => setShowPanel(true)}>
+                {icons.export} Markdown
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Documentation */}
-        <div className="mb-6">
-          <HowItWorks />
-        </div>
-
-        {isDirty && (
-          <div
-            className="font-mono text-faint text-center mb-4 italic"
-            style={{ fontSize: "0.7rem" }}
-          >
-            {t.autoSaved}
+          {/* Documentation */}
+          <div className="mb-6">
+            <HowItWorks />
           </div>
-        )}
 
-        <div className="font-display text-center text-accent text-xs uppercase tracking-widest mb-2 opacity-70">
-          {t.sheetLabel}
-        </div>
-        <div className="divider-rune mb-8">{t.dividers.editor}</div>
-
-        <div className="flex flex-col gap-8">
-          {/* Identity */}
-          <section>
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.identity}>
-                {t.sections.identity}
-              </Tooltip>
+          {isDirty && (
+            <div
+              className="font-mono text-faint text-center mb-4 italic"
+              style={{ fontSize: "0.7rem" }}
+            >
+              {t.autoSaved}
             </div>
-            <div className="flex flex-col gap-3">
-              <div>
-                <label
-                  className="font-display block text-accent uppercase tracking-wider mb-1"
-                  style={{ fontSize: "0.7rem" }}
-                >
-                  <Tooltip description={descriptions.fields.name}>
-                    {t.fields.name}
-                  </Tooltip>
-                </label>
-                <input
-                  type="text"
-                  className="rpg-input text-xl"
-                  placeholder={ph.name}
-                  value={sheet.name}
-                  onChange={(e) => updateField("name", e.target.value)}
-                />
+          )}
+
+          <div className="font-display text-center text-accent text-xs uppercase tracking-widest mb-2 opacity-70">
+            {t.sheetLabel}
+          </div>
+          <div className="divider-rune mb-8">{t.dividers.editor}</div>
+
+          <div className="flex flex-col gap-8">
+            {/* Identity */}
+            <section>
+              <div className="section-header">
+                <Tooltip description={descriptions.sections.identity}>
+                  {t.sections.identity}
+                </Tooltip>
               </div>
-              <div>
-                <label
-                  className="font-display block text-accent uppercase tracking-wider mb-1"
-                  style={{ fontSize: "0.7rem" }}
-                >
-                  <Tooltip description={descriptions.fields.backstory}>
-                    {t.fields.backstory}
-                  </Tooltip>
-                </label>
-                <textarea
-                  className="rpg-input rpg-textarea"
-                  placeholder={ph.backstory}
-                  value={sheet.description}
-                  onChange={(e) => updateField("description", e.target.value)}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Attributes / Stats */}
-          <section>
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.attributes}>
-                {t.sections.attributes}
-              </Tooltip>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {STAT_KEYS.map((key) => (
-                <div key={key}>
-                  <label
-                    className="font-display block text-accent uppercase tracking-wider mb-1"
-                    style={{ fontSize: "0.65rem" }}
-                  >
-                    <Tooltip description={descriptions.stats[key]}>
-                      {t.stats[key].label}
-                    </Tooltip>
-                  </label>
+              {/* Responsive layout: image top on mobile, left on sm+ */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                {/* Profile image well */}
+                <div className="flex-shrink-0 flex flex-col items-center gap-2">
+                  <div className="relative group" style={{ width: "96px", height: "96px" }}>
+                    {sheet.image ? (
+                      <>
+                        <img
+                          src={sheet.image}
+                          alt="Profile"
+                          className="w-full h-full object-cover rounded"
+                          style={{ border: "1px solid var(--color-border)" }}
+                        />
+                        {/* Remove button */}
+                        <button
+                          type="button"
+                          aria-label="Remove image"
+                          className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-xs leading-none"
+                          style={{
+                            background: "var(--color-accent)",
+                            color: "var(--color-bg)",
+                            border: "1px solid var(--color-border)",
+                          }}
+                          onClick={() => setImage(null)}
+                        >
+                          ×
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label="Upload profile image"
+                        className="w-full h-full flex flex-col items-center justify-center gap-1 rounded opacity-60 hover:opacity-100 transition-opacity"
+                        style={{
+                          border: "1px dashed var(--color-border)",
+                          background: "transparent",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>+</span>
+                        <span
+                          className="font-mono"
+                          style={{ fontSize: "0.55rem", color: "var(--color-text-muted)" }}
+                        >
+                          image
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                  {sheet.image && (
+                    <button
+                      type="button"
+                      className="font-mono opacity-50 hover:opacity-100 transition-opacity"
+                      style={{
+                        fontSize: "0.6rem",
+                        color: "var(--color-text-muted)",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      change
+                    </button>
+                  )}
+                  {imageError && (
+                    <p
+                      className="font-mono text-center"
+                      style={{ fontSize: "0.6rem", color: "var(--color-accent)", maxWidth: "96px" }}
+                    >
+                      {imageError}
+                    </p>
+                  )}
+                  {/* Hidden file input */}
                   <input
-                    type="text"
-                    className="rpg-input"
-                    placeholder={ph.stats[key]}
-                    value={sheet.stats[key]}
-                    onChange={(e) => updateStat(key, e.target.value)}
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    aria-label="Upload profile image"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageFile(file);
+                      // Reset so same file can be re-selected
+                      e.target.value = "";
+                    }}
                   />
                 </div>
-              ))}
-            </div>
-          </section>
 
-          {/* Hardware */}
-          <section>
-            <ComponentList
-              title={t.sections.hardware}
-              items={sheet.hardware}
-              onAdd={addHardware}
-              onUpdate={updateHardware}
-              onRemove={removeHardware}
-              removeIcon={icons.remove}
-              tooltipDescription={descriptions.sections.hardware}
-              placeholder={{
-                name: ph.hardwareName,
-                description: ph.hardwareDescription,
-              }}
-            />
-          </section>
+                {/* Name + backstory */}
+                <div className="flex flex-col gap-3 flex-1 min-w-0">
+                  <div>
+                    <label
+                      className="font-display block text-accent uppercase tracking-wider mb-1"
+                      style={{ fontSize: "0.7rem" }}
+                    >
+                      <Tooltip description={descriptions.fields.name}>{t.fields.name}</Tooltip>
+                    </label>
+                    <input
+                      type="text"
+                      className="rpg-input text-xl"
+                      placeholder={ph.name}
+                      value={sheet.name}
+                      onChange={(e) => updateField("name", e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="font-display block text-accent uppercase tracking-wider mb-1"
+                      style={{ fontSize: "0.7rem" }}
+                    >
+                      <Tooltip description={descriptions.fields.backstory}>
+                        {t.fields.backstory}
+                      </Tooltip>
+                    </label>
+                    <textarea
+                      className="rpg-input rpg-textarea"
+                      placeholder={ph.backstory}
+                      value={sheet.description}
+                      onChange={(e) => updateField("description", e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
 
-          {/* Skills / Services */}
-          <section>
-            <ComponentList
-              title={t.sections.skills}
-              items={sheet.services}
-              onAdd={addService}
-              onUpdate={updateService}
-              onRemove={removeService}
-              removeIcon={icons.remove}
-              tooltipDescription={descriptions.sections.skills}
-              placeholder={{
-                name: ph.skillName,
-                description: ph.skillDescription,
-              }}
-            />
-          </section>
+            {/* Attributes / Stats */}
+            <section>
+              <div className="section-header">
+                <Tooltip description={descriptions.sections.attributes}>
+                  {t.sections.attributes}
+                </Tooltip>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {STAT_KEYS.map((key) => (
+                  <div key={key}>
+                    <label
+                      className="font-display block text-accent uppercase tracking-wider mb-1"
+                      style={{ fontSize: "0.65rem" }}
+                    >
+                      <Tooltip description={descriptions.stats[key]}>{t.stats[key].label}</Tooltip>
+                    </label>
+                    <input
+                      type="text"
+                      className="rpg-input"
+                      placeholder={ph.stats[key]}
+                      value={sheet.stats[key]}
+                      onChange={(e) => updateStat(key, e.target.value)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
 
-          {/* Custom Fields */}
-          <section>
-            <CustomFieldList
-              title={t.sections.customFields}
-              fields={sheet.customFields}
-              onAdd={addCustomField}
-              onUpdate={updateCustomField}
-              onRemove={removeCustomField}
-              removeIcon={icons.remove}
-              tooltipDescription={descriptions.sections.customFields}
-              labelPlaceholder={ph.customLabel}
-              valuePlaceholder={ph.customValue}
-            />
-          </section>
+            {/* Hardware */}
+            <section>
+              <ComponentList
+                title={t.sections.hardware}
+                items={sheet.hardware}
+                onAdd={addHardware}
+                onUpdate={updateHardware}
+                onRemove={removeHardware}
+                removeIcon={icons.remove}
+                tooltipDescription={descriptions.sections.hardware}
+                placeholder={{
+                  name: ph.hardwareName,
+                  description: ph.hardwareDescription,
+                }}
+              />
+            </section>
+
+            {/* Skills / Services */}
+            <section>
+              <ComponentList
+                title={t.sections.skills}
+                items={sheet.services}
+                onAdd={addService}
+                onUpdate={updateService}
+                onRemove={removeService}
+                removeIcon={icons.remove}
+                tooltipDescription={descriptions.sections.skills}
+                placeholder={{
+                  name: ph.skillName,
+                  description: ph.skillDescription,
+                }}
+              />
+            </section>
+
+            {/* Custom Fields */}
+            <section>
+              <CustomFieldList
+                title={t.sections.customFields}
+                fields={sheet.customFields}
+                onAdd={addCustomField}
+                onUpdate={updateCustomField}
+                onRemove={removeCustomField}
+                removeIcon={icons.remove}
+                tooltipDescription={descriptions.sections.customFields}
+                labelPlaceholder={ph.customLabel}
+                valuePlaceholder={ph.customValue}
+              />
+            </section>
+          </div>
+
+          <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>
+          <p
+            className="font-mono text-center text-faint opacity-50"
+            style={{ fontSize: "0.65rem" }}
+          >
+            ID: {sheet.id} · Created: {new Date(sheet.createdAt).toLocaleDateString()}
+          </p>
         </div>
-
-        <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>
-        <p
-          className="font-mono text-center text-faint opacity-50"
-          style={{ fontSize: "0.65rem" }}
-        >
-          ID: {sheet.id} · Created: {new Date(sheet.createdAt).toLocaleDateString()}
-        </p>
       </div>
-    </div>
 
-    {showPanel && (
-      <MarkdownPanel
-        initialMarkdown={exportMarkdown(sheet, theme)}
-        filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
-        onImport={handleImport}
-        onClose={() => setShowPanel(false)}
-      />
-    )}
+      {showPanel && (
+        <MarkdownPanel
+          initialMarkdown={exportMarkdown(sheet, theme)}
+          filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
+          onImport={handleImport}
+          onClose={() => setShowPanel(false)}
+        />
+      )}
 
-    {showHomeConfirm && (
-      <ConfirmDialog
-        message="Going home will clear your current sheet from memory. Export it first if you want to keep it."
-        confirmLabel="Leave anyway"
-        cancelLabel="Stay"
-        onConfirm={() => navigate("/")}
-        onCancel={() => setShowHomeConfirm(false)}
-      />
-    )}
+      {showHomeConfirm && (
+        <ConfirmDialog
+          message="Going home will clear your current sheet from memory. Export it first if you want to keep it."
+          confirmLabel="Leave anyway"
+          cancelLabel="Stay"
+          onConfirm={() => navigate("/")}
+          onCancel={() => setShowHomeConfirm(false)}
+        />
+      )}
     </>
   );
 }

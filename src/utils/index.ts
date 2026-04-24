@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
-import type { Theme } from "../themes/types";
 import { themeIds } from "../themes";
+import type { Theme } from "../themes/types";
 import type { ThemeId } from "../themes/types";
 import { HomelabSheetSchema } from "../types";
 export { hasContent } from "./hasContent";
@@ -62,14 +62,14 @@ export function getRandomPlaceholder(placeholders: [string, ...string[]]): strin
 // ---------------------------------------------------------------------------
 
 const STAT_HEADING_MAP: Record<string, StatKey> = {
-  "scalability": "scalability",
-  "reliability": "reliability",
-  "cost": "cost",
+  scalability: "scalability",
+  reliability: "reliability",
+  cost: "cost",
   "cloud independence": "cloudIndependence",
-  "security": "security",
-  "monitoring": "monitoring",
+  security: "security",
+  monitoring: "monitoring",
   "backup strategy": "backupStrategy",
-  "deployment": "deployment",
+  deployment: "deployment",
 };
 
 // Inverse map: StatKey → canonical heading text
@@ -96,6 +96,43 @@ const STAT_KEYS_ORDERED: StatKey[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Image resize helper
+// ---------------------------------------------------------------------------
+
+const MAX_IMAGE_PX = 300;
+
+/**
+ * Resize an image File to at most MAX_IMAGE_PX × MAX_IMAGE_PX,
+ * compress as JPEG at 80% quality, and return a data URL string.
+ */
+export function resizeImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      const { width, height } = img;
+      const scale = Math.min(1, MAX_IMAGE_PX / Math.max(width, height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(width * scale);
+      canvas.height = Math.round(height * scale);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Failed to load image"));
+    };
+    img.src = objectUrl;
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Markdown export
 // ---------------------------------------------------------------------------
 
@@ -106,6 +143,7 @@ export function exportMarkdown(sheet: HomelabSheet, theme: Theme): string {
   lines.push("---");
   lines.push(`id: ${sheet.id}`);
   lines.push(`theme: ${theme.id}`);
+  if (sheet.image) lines.push(`image: ${sheet.image}`);
   lines.push(`createdAt: ${sheet.createdAt}`);
   lines.push(`updatedAt: ${sheet.updatedAt}`);
   lines.push("---");
@@ -209,14 +247,14 @@ export function importMarkdown(raw: string): ImportResult {
 
   // Validate required frontmatter fields
   if (!fm.id) return { success: false, error: "Frontmatter missing required field: id" };
-  if (!fm.createdAt) return { success: false, error: "Frontmatter missing required field: createdAt" };
-  if (!fm.updatedAt) return { success: false, error: "Frontmatter missing required field: updatedAt" };
+  if (!fm.createdAt)
+    return { success: false, error: "Frontmatter missing required field: createdAt" };
+  if (!fm.updatedAt)
+    return { success: false, error: "Frontmatter missing required field: updatedAt" };
 
   // Resolve theme id
   const themeId: ThemeId | null =
-    fm.theme && (themeIds as string[]).includes(fm.theme)
-      ? (fm.theme as ThemeId)
-      : null;
+    fm.theme && (themeIds as string[]).includes(fm.theme) ? (fm.theme as ThemeId) : null;
 
   // Parse body with a line-by-line state machine
   const stats: Partial<Record<StatKey, string>> = {};
@@ -227,7 +265,14 @@ export function importMarkdown(raw: string): ImportResult {
   let name = "";
   let description = "";
 
-  type Section = "none" | "description" | "attributes" | "hardware" | "services" | "customFields" | "unknown";
+  type Section =
+    | "none"
+    | "description"
+    | "attributes"
+    | "hardware"
+    | "services"
+    | "customFields"
+    | "unknown";
   let section: Section = "none";
   let currentItemName = "";
   let currentItemLines: string[] = [];
@@ -241,9 +286,7 @@ export function importMarkdown(raw: string): ImportResult {
       if (key) {
         stats[key] = content;
       } else {
-        console.error(
-          `[importMarkdown] Unrecognised stat heading "${currentItemName}" — skipping`
-        );
+        console.error(`[importMarkdown] Unrecognised stat heading "${currentItemName}" — skipping`);
       }
     } else if (section === "hardware") {
       hardware.push({ id: nanoid(8), name: currentItemName, description: content });
@@ -257,7 +300,7 @@ export function importMarkdown(raw: string): ImportResult {
   }
 
   const bodyLines = body.split("\n");
-  let descriptionLines: string[] = [];
+  const descriptionLines: string[] = [];
   let inDescription = false;
 
   for (const line of bodyLines) {
@@ -286,7 +329,9 @@ export function importMarkdown(raw: string): ImportResult {
       else if (heading === "services") section = "services";
       else if (heading === "custom fields") section = "customfields" as Section;
       else {
-        console.error(`[importMarkdown] Unrecognised section "## ${line.slice(3).trim()}" — skipping`);
+        console.error(
+          `[importMarkdown] Unrecognised section "## ${line.slice(3).trim()}" — skipping`
+        );
         section = "unknown";
       }
       // Fix the typo — customfields without space
@@ -310,7 +355,12 @@ export function importMarkdown(raw: string): ImportResult {
       continue;
     }
 
-    if (currentItemName && section !== "none" && section !== "description" && section !== "unknown") {
+    if (
+      currentItemName &&
+      section !== "none" &&
+      section !== "description" &&
+      section !== "unknown"
+    ) {
       currentItemLines.push(line);
     }
   }
@@ -324,6 +374,7 @@ export function importMarkdown(raw: string): ImportResult {
     id: fm.id,
     name,
     description,
+    image: fm.image || undefined,
     stats: {
       scalability: stats.scalability ?? "",
       reliability: stats.reliability ?? "",

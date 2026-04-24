@@ -24,6 +24,18 @@ describe("buildShareUrl", () => {
     expect(result.startsWith("https://example.com/share")).toBe(true);
   });
 
+  it("preserves subpath in base URL (e.g. GitHub Pages)", () => {
+    const result = buildShareUrl(RAW_URL, "https://example.com/homelab-hero");
+    expect(result.startsWith("https://example.com/homelab-hero/share")).toBe(true);
+    const url = new URL(result);
+    expect(url.searchParams.get("src")).toBe(RAW_URL);
+  });
+
+  it("handles trailing slash in base URL", () => {
+    const result = buildShareUrl(RAW_URL, "https://example.com/homelab-hero/");
+    expect(result.startsWith("https://example.com/homelab-hero/share")).toBe(true);
+  });
+
   it("returns empty string when rawUrl is empty", () => {
     expect(buildShareUrl("", BASE)).toBe("");
   });

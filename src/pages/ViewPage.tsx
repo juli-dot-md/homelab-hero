@@ -5,8 +5,8 @@ import { SharePanel } from "../components/SharePanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
-import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
+import { descriptions } from "../themes/descriptions";
 import type { StatKey } from "../types";
 import { getBaseUrl } from "../utils";
 
@@ -38,11 +38,7 @@ function StatBlock({
           className="font-display text-accent uppercase tracking-widest mb-1"
           style={{ fontSize: "0.65rem" }}
         >
-          {tooltipDescription ? (
-            <Tooltip description={tooltipDescription}>{label}</Tooltip>
-          ) : (
-            label
-          )}
+          {tooltipDescription ? <Tooltip description={tooltipDescription}>{label}</Tooltip> : label}
         </div>
         <div className="font-body text-[color:var(--color-text-base)] text-lg">{value}</div>
       </div>
@@ -59,9 +55,7 @@ function ComponentBlock({ name, description }: { name: string; description: stri
       >
         {name}
       </div>
-      {description && (
-        <div className="font-body text-muted text-base italic">{description}</div>
-      )}
+      {description && <div className="font-body text-muted text-base italic">{description}</div>}
     </div>
   );
 }
@@ -97,134 +91,160 @@ export function ViewPage() {
 
   return (
     <>
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Toolbar */}
-        <div className="flex items-center justify-between mb-8 gap-2 flex-wrap">
-          <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/edit")}>
-            {icons.back} Edit
-          </button>
-          <div className="flex gap-2 items-center">
-            <ThemePicker />
-            <button type="button" className="btn-primary" onClick={() => setShowShare(true)}>
-              {icons.preview} Share
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          {/* Toolbar */}
+          <div className="flex items-center justify-between mb-8 gap-2 flex-wrap">
+            <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/edit")}>
+              {icons.back} Edit
             </button>
+            <div className="flex gap-2 items-center">
+              <ThemePicker />
+              <button type="button" className="btn-primary" onClick={() => setShowShare(true)}>
+                {icons.preview} Share
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Documentation */}
-        <div className="mb-6">
-          <HowItWorks />
-        </div>
+          {/* Documentation */}
+          <div className="mb-6">
+            <HowItWorks />
+          </div>
 
-        {/* Sheet Header */}
-        <div className="text-center mb-8">
-          <p
-            className="font-display text-faint uppercase mb-2"
-            style={{ letterSpacing: "0.25em", fontSize: "0.75rem" }}
-          >
-            {t.sheetLabel}
-          </p>
-          <h1
-            className="font-display text-accent font-bold mb-4"
-            style={{ fontSize: "clamp(2rem, 6vw, 3rem)" }}
-          >
-            {sheet.name}
-          </h1>
-          {sheet.description && (
-            <p className="font-body text-[color:var(--color-text-base)] text-xl italic max-w-xl mx-auto opacity-90">
-              "{sheet.description}"
+          {/* Sheet Header */}
+          <div className="mb-8">
+            <p
+              className="font-display text-faint uppercase text-center mb-4"
+              style={{ letterSpacing: "0.25em", fontSize: "0.75rem" }}
+            >
+              {t.sheetLabel}
             </p>
-          )}
-        </div>
-
-        {/* Attributes / Stats */}
-        {filledStats.length > 0 && (
-          <section className="mb-8">
-            <div className="divider-rune mb-6">{t.dividers.statsSection}</div>
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.attributes}>
-                {t.sections.attributes}
-              </Tooltip>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {filledStats.map((key) => (
-                <StatBlock
-                  key={key}
-                  label={t.stats[key].label}
-                  value={sheet.stats[key]}
-                  tooltipDescription={descriptions.stats[key]}
+            {sheet.image ? (
+              /* With image: responsive layout — stacked on mobile, side-by-side on sm+ */
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                <img
+                  src={sheet.image}
+                  alt={sheet.name}
+                  className="rounded flex-shrink-0"
+                  style={{
+                    width: "96px",
+                    height: "96px",
+                    objectFit: "cover",
+                    border: "1px solid var(--color-border)",
+                  }}
                 />
-              ))}
-            </div>
-          </section>
-        )}
+                <div className="text-center sm:text-left">
+                  <h1
+                    className="font-display text-accent font-bold mb-2"
+                    style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)" }}
+                  >
+                    {sheet.name}
+                  </h1>
+                  {sheet.description && (
+                    <p className="font-body text-[color:var(--color-text-base)] text-lg italic opacity-90">
+                      "{sheet.description}"
+                    </p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* No image: original centred layout */
+              <div className="text-center">
+                <h1
+                  className="font-display text-accent font-bold mb-4"
+                  style={{ fontSize: "clamp(2rem, 6vw, 3rem)" }}
+                >
+                  {sheet.name}
+                </h1>
+                {sheet.description && (
+                  <p className="font-body text-[color:var(--color-text-base)] text-xl italic max-w-xl mx-auto opacity-90">
+                    "{sheet.description}"
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
 
-        {/* Custom Fields */}
-        {hasCustomFields && (
-          <section className="mb-8">
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.customFields}>
-                {t.sections.customFields}
-              </Tooltip>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {sheet.customFields.map((field) => (
-                <StatBlock key={field.id} label={field.label} value={field.value} />
-              ))}
-            </div>
-          </section>
-        )}
+          {/* Attributes / Stats */}
+          {filledStats.length > 0 && (
+            <section className="mb-8">
+              <div className="divider-rune mb-6">{t.dividers.statsSection}</div>
+              <div className="section-header">
+                <Tooltip description={descriptions.sections.attributes}>
+                  {t.sections.attributes}
+                </Tooltip>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {filledStats.map((key) => (
+                  <StatBlock
+                    key={key}
+                    label={t.stats[key].label}
+                    value={sheet.stats[key]}
+                    tooltipDescription={descriptions.stats[key]}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
 
-        {/* Hardware */}
-        {hasHardware && (
-          <section className="mb-8">
-            <div className="divider-rune mb-6">{t.dividers.equipmentSection}</div>
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.hardware}>
-                {t.sections.hardware}
-              </Tooltip>
-            </div>
-            <div className="flex flex-col gap-3">
-              {sheet.hardware.map((h) => (
-                <ComponentBlock key={h.id} name={h.name} description={h.description} />
-              ))}
-            </div>
-          </section>
-        )}
+          {/* Custom Fields */}
+          {hasCustomFields && (
+            <section className="mb-8">
+              <div className="section-header">
+                <Tooltip description={descriptions.sections.customFields}>
+                  {t.sections.customFields}
+                </Tooltip>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {sheet.customFields.map((field) => (
+                  <StatBlock key={field.id} label={field.label} value={field.value} />
+                ))}
+              </div>
+            </section>
+          )}
 
-        {/* Services */}
-        {hasServices && (
-          <section className="mb-8">
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.skills}>
-                {t.sections.skills}
-              </Tooltip>
-            </div>
-            <div className="flex flex-col gap-3">
-              {sheet.services.map((s) => (
-                <ComponentBlock key={s.id} name={s.name} description={s.description} />
-              ))}
-            </div>
-          </section>
-        )}
+          {/* Hardware */}
+          {hasHardware && (
+            <section className="mb-8">
+              <div className="divider-rune mb-6">{t.dividers.equipmentSection}</div>
+              <div className="section-header">
+                <Tooltip description={descriptions.sections.hardware}>
+                  {t.sections.hardware}
+                </Tooltip>
+              </div>
+              <div className="flex flex-col gap-3">
+                {sheet.hardware.map((h) => (
+                  <ComponentBlock key={h.id} name={h.name} description={h.description} />
+                ))}
+              </div>
+            </section>
+          )}
 
-        <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>
-        <p
-          className="font-mono text-center text-faint opacity-40"
-          style={{ fontSize: "0.65rem" }}
-        >
-          {sheet.id} · {new Date(sheet.updatedAt).toLocaleDateString()}
-        </p>
+          {/* Services */}
+          {hasServices && (
+            <section className="mb-8">
+              <div className="section-header">
+                <Tooltip description={descriptions.sections.skills}>{t.sections.skills}</Tooltip>
+              </div>
+              <div className="flex flex-col gap-3">
+                {sheet.services.map((s) => (
+                  <ComponentBlock key={s.id} name={s.name} description={s.description} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <div className="divider-rune mt-12 mb-4">{t.endOfSheet}</div>
+          <p
+            className="font-mono text-center text-faint opacity-40"
+            style={{ fontSize: "0.65rem" }}
+          >
+            {sheet.id} · {new Date(sheet.updatedAt).toLocaleDateString()}
+          </p>
+        </div>
       </div>
-    </div>
 
-    {showShare && (
-      <SharePanel
-        baseUrl={getBaseUrl()}
-        onClose={() => setShowShare(false)}
-      />
-    )}
+      {showShare && <SharePanel baseUrl={getBaseUrl()} onClose={() => setShowShare(false)} />}
     </>
   );
 }
