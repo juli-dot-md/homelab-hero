@@ -39,9 +39,87 @@ const SECTIONS: Section[] = [
   },
 ];
 
+const AI_PROMPT = `Convert my homelab configuration into a Homelab Hero markdown sheet. Use only the information I provide — do not invent or assume values.
+
+Output exactly this format:
+
+---
+id: <generate a random 8-character alphanumeric id>
+theme: rpg-epic
+createdAt: <today's date as ISO 8601, e.g. 2026-04-24T00:00:00.000Z>
+updatedAt: <today's date as ISO 8601>
+---
+
+# <homelab name>
+
+<one sentence description of the homelab>
+
+## Attributes
+
+### Scalability
+<value or omit this block>
+
+### Reliability
+<value or omit this block>
+
+### Cost
+<value or omit this block>
+
+### Cloud Independence
+<value or omit this block>
+
+### Security
+<value or omit this block>
+
+### Monitoring
+<value or omit this block>
+
+### Backup Strategy
+<value or omit this block>
+
+### Deployment
+<value or omit this block>
+
+## Hardware
+
+### <device name>
+<brief description: specs and role>
+
+(repeat for each device)
+
+## Services
+
+### <service name>
+<brief description: what it does>
+
+(repeat for each service)
+
+## Custom Fields
+
+### <label>
+<value>
+
+(repeat for any extra info that doesn't fit above — power draw, location, etc.)
+
+Rules:
+- Omit any section or attribute block that has no data
+- Keep values short — one line each
+- Do not add any text outside the markdown block
+- Do not wrap the output in a code fence
+
+Here is my homelab data:
+<paste your export, config file, or description below>`;
+
 export function HowItWorks() {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const regionId = useId();
+
+  async function handleCopyPrompt() {
+    await navigator.clipboard.writeText(AI_PROMPT);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
     <div className="how-it-works w-full">
@@ -87,6 +165,25 @@ export function HowItWorks() {
           Once you have the raw URL, go to the Preview page, click Share, paste the URL, and copy
           the generated link.
         </p>
+
+        {/* AI import section */}
+        <div className="how-it-works-section">
+          <h3 className="how-it-works-heading">Generate with AI</h3>
+          <p className="how-it-works-text">
+            Have an existing homelab setup? Use an AI assistant (ChatGPT, Claude, etc.) to convert
+            your config files, Dockhand exports, Portainer data, Homer YAML, or any other format
+            into a Homelab Hero sheet. Copy the prompt below, paste it into your AI of choice, then
+            add your own data at the bottom.
+          </p>
+          <button
+            type="button"
+            className="btn-ghost"
+            style={{ marginTop: "0.5rem", fontSize: "0.75rem" }}
+            onClick={handleCopyPrompt}
+          >
+            {copied ? "✓ Copied" : "Copy AI prompt"}
+          </button>
+        </div>
       </div>
     </div>
   );
