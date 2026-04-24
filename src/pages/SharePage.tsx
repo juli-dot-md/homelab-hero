@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { descriptions } from "../themes/descriptions";
 import { themes } from "../themes";
@@ -143,11 +142,10 @@ export function SharePage() {
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center mb-8">
           <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/")}>
             ← Homelab Hero
           </button>
-          <ThemePicker />
         </div>
 
         {/* Sheet Header */}
