@@ -28,6 +28,7 @@ export const HomelabSheetSchema = z.object({
   name: z.string().min(1, "Homelab name is required"),
   description: z.string().default(""),
   image: z.string().optional(),
+  themedHeaders: z.boolean().optional(),
   stats: StatsSchema.default({}),
   hardware: z.array(ComponentSchema).default([]),
   services: z.array(ComponentSchema).default([]),

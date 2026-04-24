@@ -73,7 +73,7 @@ const STAT_HEADING_MAP: Record<string, StatKey> = {
 };
 
 // Inverse map: StatKey → canonical heading text
-const STAT_KEY_TO_HEADING: Record<StatKey, string> = {
+export const STAT_KEY_TO_HEADING: Record<StatKey, string> = {
   scalability: "Scalability",
   reliability: "Reliability",
   cost: "Cost",
@@ -144,6 +144,7 @@ export function exportMarkdown(sheet: HomelabSheet, theme: Theme): string {
   lines.push(`id: ${sheet.id}`);
   lines.push(`theme: ${theme.id}`);
   if (sheet.image) lines.push(`image: ${sheet.image}`);
+  if (sheet.themedHeaders === false) lines.push("themedHeaders: false");
   lines.push(`createdAt: ${sheet.createdAt}`);
   lines.push(`updatedAt: ${sheet.updatedAt}`);
   lines.push("---");
@@ -375,6 +376,7 @@ export function importMarkdown(raw: string): ImportResult {
     name,
     description,
     image: fm.image || undefined,
+    themedHeaders: fm.themedHeaders === "false" ? false : undefined,
     stats: {
       scalability: stats.scalability ?? "",
       reliability: stats.reliability ?? "",

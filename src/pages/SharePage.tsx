@@ -5,7 +5,7 @@ import { themes } from "../themes";
 import { useTheme } from "../themes/ThemeContext";
 import { descriptions } from "../themes/descriptions";
 import type { HomelabSheet, StatKey } from "../types";
-import { getProxiedUrl, importMarkdown, parseShareUrl } from "../utils";
+import { STAT_KEY_TO_HEADING, getProxiedUrl, importMarkdown, parseShareUrl } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -145,6 +145,7 @@ export function SharePage() {
   const hasHardware = sheet.hardware.length > 0;
   const hasServices = sheet.services.length > 0;
   const hasCustomFields = sheet.customFields.length > 0;
+  const flavour = sheet.themedHeaders !== false;
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -162,7 +163,7 @@ export function SharePage() {
             className="font-display text-faint uppercase mb-2"
             style={{ letterSpacing: "0.25em", fontSize: "0.75rem" }}
           >
-            {t.sheetLabel}
+            {flavour ? t.sheetLabel : "Homelab Profile"}
           </p>
           <h1
             className="font-display text-accent font-bold mb-4"
@@ -180,17 +181,19 @@ export function SharePage() {
         {/* Attributes / Stats */}
         {filledStats.length > 0 && (
           <section className="mb-8">
-            <div className="divider-rune mb-6">{t.dividers.statsSection}</div>
+            <div className="divider-rune mb-6">
+              {flavour ? t.dividers.statsSection : "Attributes"}
+            </div>
             <div className="section-header">
               <Tooltip description={descriptions.sections.attributes}>
-                {t.sections.attributes}
+                {flavour ? t.sections.attributes : "Attributes"}
               </Tooltip>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filledStats.map((key) => (
                 <StatBlock
                   key={key}
-                  label={t.stats[key].label}
+                  label={flavour ? t.stats[key].label : STAT_KEY_TO_HEADING[key]}
                   value={sheet.stats[key]}
                   statKey={key}
                 />
@@ -204,7 +207,7 @@ export function SharePage() {
           <section className="mb-8">
             <div className="section-header">
               <Tooltip description={descriptions.sections.customFields}>
-                {t.sections.customFields}
+                {flavour ? t.sections.customFields : "Custom Fields"}
               </Tooltip>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -230,9 +233,13 @@ export function SharePage() {
         {/* Hardware */}
         {hasHardware && (
           <section className="mb-8">
-            <div className="divider-rune mb-6">{t.dividers.equipmentSection}</div>
+            <div className="divider-rune mb-6">
+              {flavour ? t.dividers.equipmentSection : "Hardware"}
+            </div>
             <div className="section-header">
-              <Tooltip description={descriptions.sections.hardware}>{t.sections.hardware}</Tooltip>
+              <Tooltip description={descriptions.sections.hardware}>
+                {flavour ? t.sections.hardware : "Hardware"}
+              </Tooltip>
             </div>
             <div className="flex flex-col gap-3">
               {sheet.hardware.map((h) => (
@@ -246,7 +253,9 @@ export function SharePage() {
         {hasServices && (
           <section className="mb-8">
             <div className="section-header">
-              <Tooltip description={descriptions.sections.skills}>{t.sections.skills}</Tooltip>
+              <Tooltip description={descriptions.sections.skills}>
+                {flavour ? t.sections.skills : "Services"}
+              </Tooltip>
             </div>
             <div className="flex flex-col gap-3">
               {sheet.services.map((s) => (

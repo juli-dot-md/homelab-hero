@@ -1,12 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import type { HomelabSheet } from "../types";
 import { themes } from "../themes";
-import {
-  createSheet,
-  exportMarkdown,
-  getRandomPlaceholder,
-  importMarkdown,
-} from "../utils";
+import type { HomelabSheet } from "../types";
+import { createSheet, exportMarkdown, getRandomPlaceholder, importMarkdown } from "../utils";
 
 // ---------------------------------------------------------------------------
 // Shared fixtures
@@ -32,9 +27,7 @@ const FULL_SHEET: HomelabSheet = {
     { id: "h1", name: "Dell R720", description: "2x Xeon E5-2670, 128GB RAM" },
     { id: "h2", name: "Raspberry Pi 4", description: "" },
   ],
-  services: [
-    { id: "s1", name: "Jellyfin", description: "Media server, LXC container" },
-  ],
+  services: [{ id: "s1", name: "Jellyfin", description: "Media server, LXC container" }],
   customFields: [
     { id: "cf1", label: "Power Draw", value: "~150W" },
     { id: "cf2", label: "Location", value: "Basement" },
@@ -101,7 +94,16 @@ describe("createSheet", () => {
   it("has all 8 stat keys", () => {
     const sheet = createSheet();
     const keys = Object.keys(sheet.stats);
-    for (const key of ["scalability","reliability","cost","cloudIndependence","security","monitoring","backupStrategy","deployment"]) {
+    for (const key of [
+      "scalability",
+      "reliability",
+      "cost",
+      "cloudIndependence",
+      "security",
+      "monitoring",
+      "backupStrategy",
+      "deployment",
+    ]) {
       expect(keys).toContain(key);
     }
   });
@@ -231,6 +233,27 @@ describe("exportMarkdown", () => {
     // Pi 4 has no description — should just be a heading with no trailing content
     expect(md).toContain("### Raspberry Pi 4\n");
   });
+
+  it("does not include themedHeaders in frontmatter when undefined", () => {
+    const md = exportMarkdown(FULL_SHEET, THEME);
+    const fmEnd = md.indexOf("\n---\n", 4);
+    const frontmatter = md.slice(0, fmEnd);
+    expect(frontmatter).not.toContain("themedHeaders");
+  });
+
+  it("does not include themedHeaders in frontmatter when true", () => {
+    const sheet = { ...FULL_SHEET, themedHeaders: true };
+    const md = exportMarkdown(sheet, THEME);
+    const fmEnd = md.indexOf("\n---\n", 4);
+    const frontmatter = md.slice(0, fmEnd);
+    expect(frontmatter).not.toContain("themedHeaders");
+  });
+
+  it("includes themedHeaders: false in frontmatter when set to false", () => {
+    const sheet = { ...FULL_SHEET, themedHeaders: false };
+    const md = exportMarkdown(sheet, THEME);
+    expect(md).toContain("themedHeaders: false");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -322,6 +345,29 @@ describe("importMarkdown", () => {
     if (result.success) expect(result.themeId).toBe("rpg-epic");
   });
 
+  it("round-trips themedHeaders: false through export → import", () => {
+    const sheet = { ...FULL_SHEET, themedHeaders: false };
+    const md = exportMarkdown(sheet, THEME);
+    const result = importMarkdown(md);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.themedHeaders).toBe(false);
+  });
+
+  it("themedHeaders is undefined when not present in frontmatter", () => {
+    const md = exportMarkdown(FULL_SHEET, THEME);
+    const result = importMarkdown(md);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.themedHeaders).toBeUndefined();
+  });
+
+  it("themedHeaders is undefined when true (not written to frontmatter)", () => {
+    const sheet = { ...FULL_SHEET, themedHeaders: true as boolean };
+    const md = exportMarkdown(sheet, THEME);
+    const result = importMarkdown(md);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.themedHeaders).toBeUndefined();
+  });
+
   it("returns themeId: null for an unknown theme id in frontmatter", () => {
     const md = exportMarkdown(FULL_SHEET, THEME).replace(
       "theme: rpg-epic",
@@ -338,22 +384,21 @@ describe("importMarkdown", () => {
   });
 
   it("returns error for frontmatter missing required id field", () => {
-    const md = "---\ntheme: rpg-epic\ncreatedAt: 2026-01-01T00:00:00.000Z\nupdatedAt: 2026-01-01T00:00:00.000Z\n---\n\n# A Lab\n";
+    const md =
+      "---\ntheme: rpg-epic\ncreatedAt: 2026-01-01T00:00:00.000Z\nupdatedAt: 2026-01-01T00:00:00.000Z\n---\n\n# A Lab\n";
     const result = importMarkdown(md);
     expect(result.success).toBe(false);
   });
 
   it("returns error for frontmatter missing required createdAt", () => {
-    const md = "---\nid: abc\ntheme: rpg-epic\nupdatedAt: 2026-01-01T00:00:00.000Z\n---\n\n# A Lab\n";
+    const md =
+      "---\nid: abc\ntheme: rpg-epic\nupdatedAt: 2026-01-01T00:00:00.000Z\n---\n\n# A Lab\n";
     const result = importMarkdown(md);
     expect(result.success).toBe(false);
   });
 
   it("unrecognised ## section is skipped, rest of sheet still loads", () => {
-    const md = exportMarkdown(FULL_SHEET, THEME).replace(
-      "## Hardware",
-      "## Unknown Section"
-    );
+    const md = exportMarkdown(FULL_SHEET, THEME).replace("## Hardware", "## Unknown Section");
     const result = importMarkdown(md);
     // Sheet still loads successfully
     expect(result.success).toBe(true);
