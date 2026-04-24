@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
 import { CustomFieldList } from "../components/CustomFieldList";
 import { ExportModal } from "../components/ExportModal";
+import { ImportButton } from "../components/ImportButton";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
@@ -24,12 +25,13 @@ const STAT_KEYS: StatKey[] = [
 
 export function EditorPage() {
   const navigate = useNavigate();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { t, icons } = theme;
   const {
     sheet,
     isDirty,
     loadFromStorage,
+    loadFromMarkdown,
     updateField,
     updateStat,
     addHardware,
@@ -44,6 +46,15 @@ export function EditorPage() {
   } = useSheetStore();
 
   const [showExport, setShowExport] = useState(false);
+
+  function handleImport(markdown: string) {
+    const outcome = loadFromMarkdown(markdown);
+    if (outcome.success) {
+      if (outcome.themeId) setTheme(outcome.themeId);
+    } else {
+      alert("Could not load homelab file. Make sure it's a valid .md file exported from Homelab Hero.");
+    }
+  }
 
   useEffect(() => {
     if (!sheet) loadFromStorage();
@@ -93,6 +104,10 @@ export function EditorPage() {
             <button type="button" className="btn-ghost" onClick={() => navigate("/view")}>
               {icons.preview} Preview
             </button>
+            <ImportButton
+              onImport={handleImport}
+              label={`${icons.import} Import`}
+            />
             <button
               type="button"
               className="btn-primary"
