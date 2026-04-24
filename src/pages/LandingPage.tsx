@@ -38,63 +38,73 @@ export function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-16">
+    <div className="min-h-screen px-4 py-16 landing-layout">
       {/* Theme picker — top right */}
       <div className="absolute top-4 right-4">
         <ThemePicker />
       </div>
 
-      {/* Title */}
-      <div className="text-center mb-12">
-        <p className="font-display text-accent text-xs uppercase tracking-widest mb-3 opacity-80">
-          {t.tagline}
-        </p>
-        <h1
-          className="font-display text-accent font-bold mb-4"
-          style={{ fontSize: "clamp(2.5rem, 8vw, 4.5rem)" }}
-          role="heading"
-        >
-          {t.appName}
-        </h1>
-        <div className="divider-rune my-6">{t.dividers.landing}</div>
-        <p className="font-body text-[color:var(--color-text-base)] text-xl max-w-md mx-auto italic opacity-90">
-          {t.subtitle}
-        </p>
-      </div>
-
-      {/* Actions */}
-      <div className="scroll-card corner-ornament w-full max-w-md">
-        <div className="flex flex-col gap-4 relative z-10">
-          <button type="button" className="btn-primary py-4 text-base" onClick={handleCreate}>
-            {icons.create} {t.createBtn}
-          </button>
-
-          <div className="divider-rune">or</div>
-
-          <button
-            type="button"
-            className="btn-ghost py-3"
-            onClick={() => fileRef.current?.click()}
+      {/* Centre column: title + actions + footer */}
+      <div className="landing-centre">
+        {/* Title */}
+        <div className="text-center mb-12">
+          <p className="font-display text-accent text-xs uppercase tracking-widest mb-3 opacity-80">
+            {t.tagline}
+          </p>
+          <h1
+            className="font-display text-accent font-bold mb-4"
+            style={{ fontSize: "clamp(2.5rem, 8vw, 4.5rem)" }}
+            role="heading"
           >
-            {icons.import} {t.importBtn}
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".md,text/markdown"
-            className="hidden"
-            onChange={handleImport}
-          />
+            {t.appName}
+          </h1>
+          <div className="divider-rune my-6">{t.dividers.landing}</div>
+          <p className="font-body text-[color:var(--color-text-base)] text-xl max-w-md mx-auto italic opacity-90">
+            {t.subtitle}
+          </p>
         </div>
+
+        {/* Actions */}
+        <div className="scroll-card corner-ornament w-full max-w-md mx-auto">
+          <div className="flex flex-col gap-4 relative z-10">
+            <button type="button" className="btn-primary py-4 text-base" onClick={handleCreate}>
+              {icons.create} {t.createBtn}
+            </button>
+
+            <div className="divider-rune">or</div>
+
+            <button
+              type="button"
+              className="btn-ghost py-3"
+              onClick={() => fileRef.current?.click()}
+            >
+              {icons.import} {t.importBtn}
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".md,text/markdown"
+              className="hidden"
+              onChange={handleImport}
+            />
+          </div>
+        </div>
+
+        {/* Docs — mobile only (shown inline below actions) */}
+        <div className="landing-docs-mobile mt-6 w-full max-w-md mx-auto">
+          <HowItWorks />
+        </div>
+
+        {/* Footer */}
+        <p className="font-mono mt-8 text-faint opacity-60 text-center" style={{ fontSize: "0.7rem" }}>
+          {t.noServer}
+        </p>
       </div>
 
-      {/* Documentation */}
-      <HowItWorks />
-
-      {/* Footer */}
-      <p className="font-mono mt-8 text-faint opacity-60" style={{ fontSize: "0.7rem" }}>
-        {t.noServer}
-      </p>
+      {/* Right column: docs on desktop */}
+      <aside className="landing-docs-desktop">
+        <HowItWorks />
+      </aside>
     </div>
   );
 }

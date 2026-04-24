@@ -482,3 +482,53 @@ textarea.rpg-input::placeholder {
   color: var(--color-text-muted);
   margin: 0;
 }
+
+/* ============================================================
+   LANDING PAGE LAYOUT
+   ============================================================ */
+
+/* Mobile: single centred column */
+.landing-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.landing-centre {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Desktop sidebar docs visible, inline docs hidden */
+.landing-docs-desktop { display: none; }
+.landing-docs-mobile  { display: block; }
+
+@media (min-width: 1024px) {
+  .landing-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3rem;
+    padding-top: 4rem;
+  }
+
+  .landing-centre {
+    flex: 0 0 auto;
+    width: 28rem; /* matches max-w-md (448px) */
+  }
+
+  /* Sidebar: docs panel fixed width, sticky so it follows scroll */
+  .landing-docs-desktop {
+    display: block;
+    flex: 0 0 300px;
+    position: sticky;
+    top: 4rem;
+    align-self: flex-start;
+  }
+
+  /* Hide inline docs on desktop */
+  .landing-docs-mobile { display: none; }
+}
