@@ -1,14 +1,15 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
 import { CustomFieldList } from "../components/CustomFieldList";
+import { ExportModal } from "../components/ExportModal";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
 import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
-import { downloadMarkdown, getRandomPlaceholder } from "../utils";
+import { exportMarkdown, getRandomPlaceholder } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -41,6 +42,8 @@ export function EditorPage() {
     updateCustomField,
     removeCustomField,
   } = useSheetStore();
+
+  const [showExport, setShowExport] = useState(false);
 
   useEffect(() => {
     if (!sheet) loadFromStorage();
@@ -77,6 +80,7 @@ export function EditorPage() {
   }
 
   return (
+    <>
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
@@ -92,7 +96,7 @@ export function EditorPage() {
             <button
               type="button"
               className="btn-primary"
-              onClick={() => downloadMarkdown(sheet, theme)}
+              onClick={() => setShowExport(true)}
             >
               {icons.export} Export
             </button>
@@ -247,5 +251,14 @@ export function EditorPage() {
         </p>
       </div>
     </div>
+
+    {showExport && (
+      <ExportModal
+        markdown={exportMarkdown(sheet, theme)}
+        filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
+        onClose={() => setShowExport(false)}
+      />
+    )}
+    </>
   );
 }

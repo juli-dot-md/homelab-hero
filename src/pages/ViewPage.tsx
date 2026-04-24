@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ExportModal } from "../components/ExportModal";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
 import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
-import { downloadMarkdown } from "../utils";
+import { exportMarkdown } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -69,6 +70,7 @@ export function ViewPage() {
   const { sheet, loadFromStorage } = useSheetStore();
   const { theme } = useTheme();
   const { t, icons } = theme;
+  const [showExport, setShowExport] = useState(false);
 
   useEffect(() => {
     if (!sheet) loadFromStorage();
@@ -93,6 +95,7 @@ export function ViewPage() {
   const hasCustomFields = sheet.customFields.length > 0;
 
   return (
+    <>
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Toolbar */}
@@ -102,7 +105,7 @@ export function ViewPage() {
           </button>
           <div className="flex gap-2 items-center">
             <ThemePicker />
-            <button type="button" className="btn-primary" onClick={() => downloadMarkdown(sheet, theme)}>
+            <button type="button" className="btn-primary" onClick={() => setShowExport(true)}>
               {icons.export} Export
             </button>
           </div>
@@ -209,5 +212,14 @@ export function ViewPage() {
         </p>
       </div>
     </div>
+
+    {showExport && (
+      <ExportModal
+        markdown={exportMarkdown(sheet, theme)}
+        filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
+        onClose={() => setShowExport(false)}
+      />
+    )}
+    </>
   );
 }
