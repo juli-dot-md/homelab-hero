@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { HowItWorks } from "../components/HowItWorks";
 import { Tooltip } from "../components/Tooltip";
 import { descriptions } from "../themes/descriptions";
 import { themes } from "../themes";
@@ -140,6 +141,11 @@ export function SharePage() {
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
+        {/* Documentation */}
+        <div className="mb-6">
+          <HowItWorks />
+        </div>
+
         {/* Sheet Header */}
         <div className="text-center mb-8">
           <p

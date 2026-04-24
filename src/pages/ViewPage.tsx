@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { HowItWorks } from "../components/HowItWorks";
 import { SharePanel } from "../components/SharePanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
@@ -109,6 +110,11 @@ export function ViewPage() {
               {icons.preview} Share
             </button>
           </div>
+        </div>
+
+        {/* Documentation */}
+        <div className="mb-6">
+          <HowItWorks />
         </div>
 
         {/* Sheet Header */}
