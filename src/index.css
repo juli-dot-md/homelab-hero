@@ -326,7 +326,7 @@ textarea.rpg-input::placeholder {
 }
 
 /* ============================================================
-   EXPORT MODAL
+   MARKDOWN PANEL (replaces ExportModal + ImportButton)
    ============================================================ */
 .export-modal-backdrop {
   position: fixed;
@@ -370,9 +370,9 @@ textarea.rpg-input::placeholder {
   flex-shrink: 0;
 }
 
-.export-modal-code {
+.markdown-panel-textarea {
   flex: 1;
-  overflow-y: auto;
+  resize: none;
   margin: 0;
   padding: 1.25rem;
   font-family: var(--font-mono);
@@ -380,14 +380,24 @@ textarea.rpg-input::placeholder {
   line-height: 1.7;
   color: var(--color-text-base);
   background: rgba(0, 0, 0, 0.25);
+  border: none;
   border-bottom: 1px solid var(--color-border);
-  white-space: pre;
-  word-break: normal;
-  overflow-x: auto;
+  outline: none;
+  min-height: 300px;
+  tab-size: 2;
 }
 
-.export-modal-code code {
-  font-family: inherit;
+.markdown-panel-textarea:focus {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.markdown-panel-error {
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-danger);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
 }
 
 .export-modal-actions {

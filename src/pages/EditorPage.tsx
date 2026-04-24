@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
 import { CustomFieldList } from "../components/CustomFieldList";
-import { ExportModal } from "../components/ExportModal";
-import { ImportButton } from "../components/ImportButton";
+import { MarkdownPanel } from "../components/MarkdownPanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
@@ -45,15 +44,16 @@ export function EditorPage() {
     removeCustomField,
   } = useSheetStore();
 
-  const [showExport, setShowExport] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
 
-  function handleImport(markdown: string) {
+  function handleImport(markdown: string): boolean {
     const outcome = loadFromMarkdown(markdown);
     if (outcome.success) {
       if (outcome.themeId) setTheme(outcome.themeId);
-    } else {
-      alert("Could not load homelab file. Make sure it's a valid .md file exported from Homelab Hero.");
+      setShowPanel(false);
+      return true;
     }
+    return false;
   }
 
   useEffect(() => {
@@ -104,16 +104,12 @@ export function EditorPage() {
             <button type="button" className="btn-ghost" onClick={() => navigate("/view")}>
               {icons.preview} Preview
             </button>
-            <ImportButton
-              onImport={handleImport}
-              label={`${icons.import} Import`}
-            />
             <button
               type="button"
               className="btn-primary"
-              onClick={() => setShowExport(true)}
+              onClick={() => setShowPanel(true)}
             >
-              {icons.export} Export
+              {icons.export} Markdown
             </button>
           </div>
         </div>
@@ -267,11 +263,12 @@ export function EditorPage() {
       </div>
     </div>
 
-    {showExport && (
-      <ExportModal
-        markdown={exportMarkdown(sheet, theme)}
+    {showPanel && (
+      <MarkdownPanel
+        initialMarkdown={exportMarkdown(sheet, theme)}
         filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
-        onClose={() => setShowExport(false)}
+        onImport={handleImport}
+        onClose={() => setShowPanel(false)}
       />
     )}
     </>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ExportModal } from "../components/ExportModal";
+import { MarkdownPanel } from "../components/MarkdownPanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
@@ -67,10 +67,20 @@ function ComponentBlock({ name, description }: { name: string; description: stri
 
 export function ViewPage() {
   const navigate = useNavigate();
-  const { sheet, loadFromStorage } = useSheetStore();
-  const { theme } = useTheme();
+  const { sheet, loadFromStorage, loadFromMarkdown } = useSheetStore();
+  const { theme, setTheme } = useTheme();
   const { t, icons } = theme;
-  const [showExport, setShowExport] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
+
+  function handleImport(markdown: string): boolean {
+    const outcome = loadFromMarkdown(markdown);
+    if (outcome.success) {
+      if (outcome.themeId) setTheme(outcome.themeId);
+      setShowPanel(false);
+      return true;
+    }
+    return false;
+  }
 
   useEffect(() => {
     if (!sheet) loadFromStorage();
@@ -105,8 +115,8 @@ export function ViewPage() {
           </button>
           <div className="flex gap-2 items-center">
             <ThemePicker />
-            <button type="button" className="btn-primary" onClick={() => setShowExport(true)}>
-              {icons.export} Export
+            <button type="button" className="btn-primary" onClick={() => setShowPanel(true)}>
+              {icons.export} Markdown
             </button>
           </div>
         </div>
@@ -213,11 +223,12 @@ export function ViewPage() {
       </div>
     </div>
 
-    {showExport && (
-      <ExportModal
-        markdown={exportMarkdown(sheet, theme)}
+    {showPanel && (
+      <MarkdownPanel
+        initialMarkdown={exportMarkdown(sheet, theme)}
         filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
-        onClose={() => setShowExport(false)}
+        onImport={handleImport}
+        onClose={() => setShowPanel(false)}
       />
     )}
     </>
