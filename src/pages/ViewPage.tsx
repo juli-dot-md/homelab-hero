@@ -6,7 +6,7 @@ import { useSheetStore } from "../store";
 import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
-import { downloadJson } from "../utils";
+import { downloadMarkdown } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -102,8 +102,8 @@ export function ViewPage() {
           </button>
           <div className="flex gap-2 items-center">
             <ThemePicker />
-            <button type="button" className="btn-primary" onClick={() => downloadJson(sheet)}>
-              {icons.export} Export JSON
+            <button type="button" className="btn-primary" onClick={() => downloadMarkdown(sheet, theme)}>
+              {icons.export} Export
             </button>
           </div>
         </div>

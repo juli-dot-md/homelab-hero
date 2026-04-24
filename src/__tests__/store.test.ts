@@ -1,5 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { themes } from "../themes";
+import { exportMarkdown } from "../utils";
 import { useSheetStore } from "../store";
 
 beforeEach(() => {
@@ -168,27 +170,28 @@ describe("useSheetStore", () => {
     });
   });
 
-  describe("loadFromJson", () => {
-    it("loads a valid sheet from JSON", () => {
+  describe("loadFromMarkdown", () => {
+    it("loads a valid sheet from markdown", () => {
       const { result } = renderHook(() => useSheetStore());
       act(() => result.current.createNew());
-      const json = JSON.stringify(result.current.sheet);
+      act(() => result.current.updateField("name", "Markdown Lab"));
+      const md = exportMarkdown(result.current.sheet!, themes["rpg-epic"]);
       act(() => useSheetStore.setState({ sheet: null, isDirty: false }));
-      let success = false;
+      let outcome: { success: boolean; themeId: string | null } = { success: false, themeId: null };
       act(() => {
-        success = result.current.loadFromJson(json);
+        outcome = result.current.loadFromMarkdown(md);
       });
-      expect(success).toBe(true);
-      expect(result.current.sheet).not.toBeNull();
+      expect(outcome.success).toBe(true);
+      expect(result.current.sheet?.name).toBe("Markdown Lab");
     });
 
-    it("returns false for invalid JSON", () => {
+    it("returns false for invalid markdown", () => {
       const { result } = renderHook(() => useSheetStore());
-      let success = true;
+      let outcome: { success: boolean; themeId: string | null } = { success: true, themeId: null };
       act(() => {
-        success = result.current.loadFromJson("not json");
+        outcome = result.current.loadFromMarkdown("not markdown with frontmatter");
       });
-      expect(success).toBe(false);
+      expect(outcome.success).toBe(false);
       expect(result.current.sheet).toBeNull();
     });
   });

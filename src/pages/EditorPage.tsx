@@ -8,7 +8,7 @@ import { useSheetStore } from "../store";
 import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
-import { downloadJson, getRandomPlaceholder } from "../utils";
+import { downloadMarkdown, getRandomPlaceholder } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -92,9 +92,9 @@ export function EditorPage() {
             <button
               type="button"
               className="btn-primary"
-              onClick={() => downloadJson(sheet)}
+              onClick={() => downloadMarkdown(sheet, theme)}
             >
-              {icons.export} Export JSON
+              {icons.export} Export
             </button>
           </div>
         </div>

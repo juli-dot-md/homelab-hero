@@ -1,8 +1,12 @@
 import { create } from "zustand";
+import type { ThemeId } from "../themes/types";
+import { HomelabSheetSchema } from "../types";
 import type { HomelabSheet, StatKey } from "../types";
-import { createComponent, createCustomField, createSheet, importJson } from "../utils";
+import { createComponent, createCustomField, createSheet, importMarkdown } from "../utils";
 
 const STORAGE_KEY = "homelab-hero-sheet";
+
+type LoadMarkdownResult = { success: boolean; themeId: ThemeId | null };
 
 type SheetStore = {
   sheet: HomelabSheet | null;
@@ -10,7 +14,7 @@ type SheetStore = {
 
   createNew: () => void;
   loadFromStorage: () => void;
-  loadFromJson: (json: string) => boolean;
+  loadFromMarkdown: (markdown: string) => LoadMarkdownResult;
   save: () => void;
 
   updateField: <K extends keyof HomelabSheet>(field: K, value: HomelabSheet[K]) => void;
@@ -33,6 +37,18 @@ function persist(sheet: HomelabSheet) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(sheet));
 }
 
+// localStorage still stores JSON internally for simplicity —
+// markdown is the user-facing format, JSON is the internal cache format.
+// On storage restore we need to parse the internal JSON cache.
+function parseStoredSheet(raw: string): HomelabSheet | null {
+  try {
+    const parsed = HomelabSheetSchema.safeParse(JSON.parse(raw));
+    return parsed.success ? parsed.data : null;
+  } catch {
+    return null;
+  }
+}
+
 export const useSheetStore = create<SheetStore>((set, get) => ({
   sheet: null,
   isDirty: false,
@@ -46,16 +62,16 @@ export const useSheetStore = create<SheetStore>((set, get) => ({
   loadFromStorage: () => {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
-    const result = importJson(raw);
-    if (result.success) set({ sheet: result.data, isDirty: false });
+    const sheet = parseStoredSheet(raw);
+    if (sheet) set({ sheet, isDirty: false });
   },
 
-  loadFromJson: (json: string) => {
-    const result = importJson(json);
-    if (!result.success) return false;
+  loadFromMarkdown: (markdown: string) => {
+    const result = importMarkdown(markdown);
+    if (!result.success) return { success: false, themeId: null };
     persist(result.data);
     set({ sheet: result.data, isDirty: false });
-    return true;
+    return { success: true, themeId: result.themeId };
   },
 
   save: () => {

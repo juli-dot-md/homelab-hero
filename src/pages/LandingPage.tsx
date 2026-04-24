@@ -6,8 +6,8 @@ import { useTheme } from "../themes/ThemeContext";
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const { createNew, loadFromJson } = useSheetStore();
-  const { theme } = useTheme();
+  const { createNew, loadFromMarkdown } = useSheetStore();
+  const { theme, setTheme } = useTheme();
   const { t, icons } = theme;
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -19,14 +19,18 @@ export function LandingPage() {
   function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Reset input so the same file can be re-imported after an error
+    e.target.value = "";
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const json = ev.target?.result as string;
-      const ok = loadFromJson(json);
-      if (ok) {
+      const markdown = ev.target?.result as string;
+      const outcome = loadFromMarkdown(markdown);
+      if (outcome.success) {
+        // Restore theme from the file if it's a known theme
+        if (outcome.themeId) setTheme(outcome.themeId);
         navigate("/edit");
       } else {
-        alert("Invalid homelab file. Please check the JSON and try again.");
+        alert("Could not load homelab file. Make sure it's a valid .md file exported from Homelab Hero.");
       }
     };
     reader.readAsText(file);
@@ -76,7 +80,7 @@ export function LandingPage() {
           <input
             ref={fileRef}
             type="file"
-            accept=".json,application/json"
+            accept=".md,text/markdown"
             className="hidden"
             onChange={handleImport}
           />
