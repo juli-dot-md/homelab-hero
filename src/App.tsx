@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { EditorPage } from "./pages/EditorPage";
 import { LandingPage } from "./pages/LandingPage";
 import { SharePage } from "./pages/SharePage";
@@ -11,6 +11,8 @@ export function App() {
       <Route path="/edit" element={<EditorPage />} />
       <Route path="/view" element={<ViewPage />} />
       <Route path="/share" element={<SharePage />} />
+      {/* GitHub Pages sometimes appends index.html to the URL */}
+      <Route path="/index.html" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
