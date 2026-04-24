@@ -1,3 +1,4 @@
+import { Tooltip } from "./Tooltip";
 import type { CustomField } from "../types";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   removeIcon?: string;
   labelPlaceholder?: string;
   valuePlaceholder?: string;
+  tooltipDescription?: string;
 };
 
 export function CustomFieldList({
@@ -20,10 +22,17 @@ export function CustomFieldList({
   removeIcon = "✕",
   labelPlaceholder = "Label",
   valuePlaceholder = "Value",
+  tooltipDescription,
 }: Props) {
   return (
     <div>
-      <div className="section-header">{title}</div>
+      <div className="section-header">
+        {tooltipDescription ? (
+          <Tooltip description={tooltipDescription}>{title}</Tooltip>
+        ) : (
+          title
+        )}
+      </div>
 
       <div className="flex flex-col gap-3 mb-3">
         {fields.map((field) => (

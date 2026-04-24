@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemePicker } from "../components/ThemePicker";
+import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
+import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
 import { downloadJson } from "../utils";
@@ -17,7 +19,15 @@ const STAT_KEYS: StatKey[] = [
   "deployment",
 ];
 
-function StatBlock({ label, value }: { label: string; value: string }) {
+function StatBlock({
+  label,
+  value,
+  tooltipDescription,
+}: {
+  label: string;
+  value: string;
+  tooltipDescription?: string;
+}) {
   if (!value) return null;
   return (
     <div className="scroll-card">
@@ -26,7 +36,11 @@ function StatBlock({ label, value }: { label: string; value: string }) {
           className="font-display text-accent uppercase tracking-widest mb-1"
           style={{ fontSize: "0.65rem" }}
         >
-          {label}
+          {tooltipDescription ? (
+            <Tooltip description={tooltipDescription}>{label}</Tooltip>
+          ) : (
+            label
+          )}
         </div>
         <div className="font-body text-[color:var(--color-text-base)] text-lg">{value}</div>
       </div>
@@ -119,13 +133,18 @@ export function ViewPage() {
         {filledStats.length > 0 && (
           <section className="mb-8">
             <div className="divider-rune mb-6">{t.dividers.statsSection}</div>
-            <div className="section-header">{t.sections.attributes}</div>
+            <div className="section-header">
+              <Tooltip description={descriptions.sections.attributes}>
+                {t.sections.attributes}
+              </Tooltip>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filledStats.map((key) => (
                 <StatBlock
                   key={key}
                   label={t.stats[key].label}
                   value={sheet.stats[key]}
+                  tooltipDescription={descriptions.stats[key]}
                 />
               ))}
             </div>
@@ -135,7 +154,11 @@ export function ViewPage() {
         {/* Custom Fields */}
         {hasCustomFields && (
           <section className="mb-8">
-            <div className="section-header">{t.sections.customFields}</div>
+            <div className="section-header">
+              <Tooltip description={descriptions.sections.customFields}>
+                {t.sections.customFields}
+              </Tooltip>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {sheet.customFields.map((field) => (
                 <StatBlock key={field.id} label={field.label} value={field.value} />
@@ -148,7 +171,11 @@ export function ViewPage() {
         {hasHardware && (
           <section className="mb-8">
             <div className="divider-rune mb-6">{t.dividers.equipmentSection}</div>
-            <div className="section-header">{t.sections.hardware}</div>
+            <div className="section-header">
+              <Tooltip description={descriptions.sections.hardware}>
+                {t.sections.hardware}
+              </Tooltip>
+            </div>
             <div className="flex flex-col gap-3">
               {sheet.hardware.map((h) => (
                 <ComponentBlock key={h.id} name={h.name} description={h.description} />
@@ -160,7 +187,11 @@ export function ViewPage() {
         {/* Skills / Services */}
         {hasServices && (
           <section className="mb-8">
-            <div className="section-header">{t.sections.skills}</div>
+            <div className="section-header">
+              <Tooltip description={descriptions.sections.skills}>
+                {t.sections.skills}
+              </Tooltip>
+            </div>
             <div className="flex flex-col gap-3">
               {sheet.services.map((s) => (
                 <ComponentBlock key={s.id} name={s.name} description={s.description} />

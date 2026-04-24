@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { categories, defaultTheme, themeIds, themes } from "../themes";
+import { descriptions } from "../themes/descriptions";
 import type { ThemeId } from "../themes/types";
 
 const STAT_KEYS = [
@@ -124,4 +125,41 @@ describe("individual themes", () => {
       });
     });
   }
+});
+
+describe("themes x descriptions cross-check", () => {
+  it("every stat key used in themes has a corresponding description", () => {
+    for (const id of themeIds) {
+      const { t } = themes[id as ThemeId];
+      for (const key of Object.keys(t.stats)) {
+        expect(
+          descriptions.stats[key as keyof typeof descriptions.stats],
+          `theme "${id}" uses stat key "${key}" but descriptions.ts has no entry for it`
+        ).toBeDefined();
+      }
+    }
+  });
+
+  it("every section key used in themes has a corresponding description", () => {
+    for (const id of themeIds) {
+      const { t } = themes[id as ThemeId];
+      for (const key of Object.keys(t.sections)) {
+        expect(
+          descriptions.sections[key as keyof typeof descriptions.sections],
+          `theme "${id}" uses section key "${key}" but descriptions.ts has no entry for it`
+        ).toBeDefined();
+      }
+    }
+  });
+
+  it("every field key used in themes has a corresponding description", () => {
+    for (const _id of themeIds) {
+      for (const key of ["name", "backstory"] as const) {
+        expect(
+          descriptions.fields[key],
+          `field key "${key}" has no entry in descriptions.ts`
+        ).toBeDefined();
+      }
+    }
+  });
 });

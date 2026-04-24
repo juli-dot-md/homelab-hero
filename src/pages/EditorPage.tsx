@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
 import { CustomFieldList } from "../components/CustomFieldList";
 import { ThemePicker } from "../components/ThemePicker";
+import { Tooltip } from "../components/Tooltip";
 import { useSheetStore } from "../store";
+import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
 import { downloadJson, getRandomPlaceholder } from "../utils";
@@ -114,14 +116,20 @@ export function EditorPage() {
         <div className="flex flex-col gap-8">
           {/* Identity */}
           <section>
-            <div className="section-header">{t.sections.identity}</div>
+            <div className="section-header">
+              <Tooltip description={descriptions.sections.identity}>
+                {t.sections.identity}
+              </Tooltip>
+            </div>
             <div className="flex flex-col gap-3">
               <div>
                 <label
                   className="font-display block text-accent uppercase tracking-wider mb-1"
                   style={{ fontSize: "0.7rem" }}
                 >
-                  {t.fields.name}
+                  <Tooltip description={descriptions.fields.name}>
+                    {t.fields.name}
+                  </Tooltip>
                 </label>
                 <input
                   type="text"
@@ -136,7 +144,9 @@ export function EditorPage() {
                   className="font-display block text-accent uppercase tracking-wider mb-1"
                   style={{ fontSize: "0.7rem" }}
                 >
-                  {t.fields.backstory}
+                  <Tooltip description={descriptions.fields.backstory}>
+                    {t.fields.backstory}
+                  </Tooltip>
                 </label>
                 <textarea
                   className="rpg-input rpg-textarea"
@@ -150,7 +160,11 @@ export function EditorPage() {
 
           {/* Attributes / Stats */}
           <section>
-            <div className="section-header">{t.sections.attributes}</div>
+            <div className="section-header">
+              <Tooltip description={descriptions.sections.attributes}>
+                {t.sections.attributes}
+              </Tooltip>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {STAT_KEYS.map((key) => (
                 <div key={key}>
@@ -158,7 +172,9 @@ export function EditorPage() {
                     className="font-display block text-accent uppercase tracking-wider mb-1"
                     style={{ fontSize: "0.65rem" }}
                   >
-                    {t.stats[key].label}
+                    <Tooltip description={descriptions.stats[key]}>
+                      {t.stats[key].label}
+                    </Tooltip>
                   </label>
                   <input
                     type="text"
@@ -181,6 +197,7 @@ export function EditorPage() {
               onUpdate={updateHardware}
               onRemove={removeHardware}
               removeIcon={icons.remove}
+              tooltipDescription={descriptions.sections.hardware}
               placeholder={{
                 name: ph.hardwareName,
                 description: ph.hardwareDescription,
@@ -197,6 +214,7 @@ export function EditorPage() {
               onUpdate={updateService}
               onRemove={removeService}
               removeIcon={icons.remove}
+              tooltipDescription={descriptions.sections.skills}
               placeholder={{
                 name: ph.skillName,
                 description: ph.skillDescription,
@@ -213,6 +231,7 @@ export function EditorPage() {
               onUpdate={updateCustomField}
               onRemove={removeCustomField}
               removeIcon={icons.remove}
+              tooltipDescription={descriptions.sections.customFields}
               labelPlaceholder={ph.customLabel}
               valuePlaceholder={ph.customValue}
             />

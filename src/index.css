@@ -237,3 +237,90 @@ textarea.rpg-input::placeholder {
   font-family: sans-serif;
   font-size: 0.85rem;
 }
+
+/* ============================================================
+   TOOLTIP
+   ============================================================ */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-accent-dim);
+  background: transparent;
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: help;
+  padding: 0;
+  transition: border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.tooltip-icon:hover,
+.tooltip-icon:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  outline: none;
+}
+
+.tooltip-bubble {
+  position: absolute;
+  bottom: calc(100% + 0.6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 240px;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-focus);
+  border-radius: 2px;
+  color: var(--color-text-base);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: normal;
+}
+
+/* Hover (desktop) */
+.tooltip-wrapper:hover .tooltip-bubble {
+  opacity: 1;
+  transition-delay: 0.2s;
+}
+
+/* Touch toggle */
+.tooltip-bubble.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+/* Arrow pointing down */
+.tooltip-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--color-border-focus);
+}
