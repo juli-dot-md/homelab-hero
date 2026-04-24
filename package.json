@@ -13,6 +13,7 @@
     "format": "biome format --write ."
   },
   "dependencies": {
+    "html2canvas": "^1.4.1",
     "nanoid": "^5.1.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -21,21 +22,24 @@
     "zustand": "^5.0.3"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild"]
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@tailwindcss/vite": "^4.1.4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
-    "vite": "^6.3.4",
     "jsdom": "^26.1.0",
     "tailwindcss": "^4.1.4",
-    "@tailwindcss/vite": "^4.1.4",
     "typescript": "^5.8.3",
+    "vite": "^6.3.4",
     "vitest": "^3.1.1"
   }
 }

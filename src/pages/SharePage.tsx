@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { SharePanel } from "../components/SharePanel";
 import { Tooltip } from "../components/Tooltip";
 import { themes } from "../themes";
 import { useTheme } from "../themes/ThemeContext";
 import { descriptions } from "../themes/descriptions";
 import type { HomelabSheet, StatKey } from "../types";
-import { getProxiedUrl, importMarkdown, parseShareUrl } from "../utils";
+import { getBaseUrl, getProxiedUrl, importMarkdown, parseShareUrl } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -60,6 +61,7 @@ export function SharePage() {
   const { theme, setTheme } = useTheme();
   const { t } = theme;
   const [state, setState] = useState<State>({ status: "loading" });
+  const [showShare, setShowShare] = useState(false);
 
   useEffect(() => {
     const src = parseShareUrl(location.search);
@@ -150,9 +152,12 @@ export function SharePage() {
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Toolbar */}
-        <div className="flex items-center mb-8">
+        <div className="flex items-center justify-between mb-8 gap-2">
           <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/")}>
             ← Homelab Hero
+          </button>
+          <button type="button" className="btn-primary" onClick={() => setShowShare(true)}>
+            ↗ Share & Export
           </button>
         </div>
 
@@ -261,6 +266,15 @@ export function SharePage() {
           {sheet.id}
         </p>
       </div>
+
+      {showShare && (
+        <SharePanel
+          baseUrl={getBaseUrl()}
+          sheet={sheet}
+          filename={sheet.name.replace(/\s+/g, "-").toLowerCase()}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </div>
   );
 }

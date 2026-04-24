@@ -244,7 +244,14 @@ export function ViewPage() {
         </div>
       </div>
 
-      {showShare && <SharePanel baseUrl={getBaseUrl()} onClose={() => setShowShare(false)} />}
+      {showShare && (
+        <SharePanel
+          baseUrl={getBaseUrl()}
+          sheet={sheet}
+          filename={sheet.name.replace(/\s+/g, "-").toLowerCase()}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </>
   );
 }

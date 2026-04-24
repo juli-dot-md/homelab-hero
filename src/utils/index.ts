@@ -6,6 +6,7 @@ import { HomelabSheetSchema } from "../types";
 export { hasContent } from "./hasContent";
 export { buildShareUrl, parseShareUrl } from "./shareUrl";
 export { getBaseUrl, getProxiedUrl } from "./config";
+export { exportPng } from "./exportPng";
 import type { HomelabSheet, StatKey } from "../types";
 
 // ---------------------------------------------------------------------------
