@@ -23,7 +23,7 @@ const SECTIONS: Section[] = [
     heading: "Export, Import & Sharing",
     paragraphs: [
       "In the editor, the Markdown button opens a panel with your sheet as a .md file — plain text you can read in any editor. You can copy it, download it, or paste in a different sheet to import it.",
-      "To share with a link, host the .md file somewhere public and paste the raw URL into the Share panel. Any public URL works. A few easy options:",
+      "To share with a link, host the .md file somewhere public and paste the direct URL to the plain file (not the provider's page around it) into the Share panel. Any public URL works. A few easy options:",
     ],
     bullets: [
       "GitHub Gist (gist.github.com) — paste your markdown into a new public gist, then click Raw. Free, no repo needed.",

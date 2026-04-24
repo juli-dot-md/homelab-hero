@@ -24,7 +24,9 @@ export function SharePanel({ baseUrl, onClose }: Props) {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   useEffect(() => {
@@ -78,22 +80,26 @@ export function SharePanel({ baseUrl, onClose }: Props) {
               className="font-display text-accent uppercase tracking-wider"
               style={{ fontSize: "0.65rem", display: "block", marginBottom: "0.4rem" }}
             >
-              Raw file URL
+              URL to your hosted .md file
             </label>
             <input
               id={`${titleId}-input`}
               ref={inputRef}
               type="url"
               className="rpg-input"
-              placeholder="https://raw.githubusercontent.com/you/repo/main/sheet.md"
+              placeholder="https://gist.githubusercontent.com/you/.../file.md"
               value={rawUrl}
-              onChange={(e) => { setRawUrl(e.target.value); setCopied(false); }}
+              onChange={(e) => {
+                setRawUrl(e.target.value);
+                setCopied(false);
+              }}
             />
             <p
               className="font-mono text-faint"
               style={{ fontSize: "0.65rem", marginTop: "0.4rem" }}
             >
-              Host your .md file publicly (GitHub, GitLab, etc.) and paste the raw URL here.
+              Must be a direct link to the plain .md file — no HTML page around it. On GitHub Gist,
+              click Raw first.
             </p>
           </div>
 
