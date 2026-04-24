@@ -3,6 +3,7 @@ import type { Theme } from "../themes/types";
 import { themeIds } from "../themes";
 import type { ThemeId } from "../themes/types";
 import { HomelabSheetSchema } from "../types";
+export { hasContent } from "./hasContent";
 import type { HomelabSheet, StatKey } from "../types";
 
 // ---------------------------------------------------------------------------

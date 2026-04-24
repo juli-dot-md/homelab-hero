@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
 import { CustomFieldList } from "../components/CustomFieldList";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 import { MarkdownPanel } from "../components/MarkdownPanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
@@ -9,7 +10,7 @@ import { useSheetStore } from "../store";
 import { descriptions } from "../themes/descriptions";
 import { useTheme } from "../themes/ThemeContext";
 import type { StatKey } from "../types";
-import { exportMarkdown, getRandomPlaceholder } from "../utils";
+import { exportMarkdown, getRandomPlaceholder, hasContent } from "../utils";
 
 const STAT_KEYS: StatKey[] = [
   "scalability",
@@ -45,6 +46,7 @@ export function EditorPage() {
   } = useSheetStore();
 
   const [showPanel, setShowPanel] = useState(false);
+  const [showHomeConfirm, setShowHomeConfirm] = useState(false);
 
   function handleImport(markdown: string): boolean {
     const outcome = loadFromMarkdown(markdown);
@@ -96,7 +98,17 @@ export function EditorPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 gap-2 flex-wrap">
-          <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/")}>
+          <button
+            type="button"
+            className="btn-ghost text-xs"
+            onClick={() => {
+              if (sheet && hasContent(sheet)) {
+                setShowHomeConfirm(true);
+              } else {
+                navigate("/");
+              }
+            }}
+          >
             {icons.back} Home
           </button>
           <div className="flex gap-2 items-center flex-wrap">
@@ -269,6 +281,16 @@ export function EditorPage() {
         filename={`${sheet.name.replace(/\s+/g, "-").toLowerCase()}.md`}
         onImport={handleImport}
         onClose={() => setShowPanel(false)}
+      />
+    )}
+
+    {showHomeConfirm && (
+      <ConfirmDialog
+        message="Going home will clear your current sheet from memory. Export it first if you want to keep it."
+        confirmLabel="Leave anyway"
+        cancelLabel="Stay"
+        onConfirm={() => navigate("/")}
+        onCancel={() => setShowHomeConfirm(false)}
       />
     )}
     </>
