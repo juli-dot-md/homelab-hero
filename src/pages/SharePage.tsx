@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { HowItWorks } from "../components/HowItWorks";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
 import { descriptions } from "../themes/descriptions";
 import { themes } from "../themes";
@@ -53,6 +53,7 @@ function ComponentBlock({ name, description }: { name: string; description: stri
 
 export function SharePage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { t } = theme;
   const [state, setState] = useState<State>({ status: "loading" });
@@ -141,9 +142,12 @@ export function SharePage() {
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        {/* Documentation */}
-        <div className="mb-6">
-          <HowItWorks />
+        {/* Toolbar */}
+        <div className="flex items-center justify-between mb-8">
+          <button type="button" className="btn-ghost text-xs" onClick={() => navigate("/")}>
+            ← Homelab Hero
+          </button>
+          <ThemePicker />
         </div>
 
         {/* Sheet Header */}
