@@ -184,11 +184,6 @@ export function SharePage() {
             <div className="divider-rune mb-6">
               {flavour ? t.dividers.statsSection : "Attributes"}
             </div>
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.attributes}>
-                {flavour ? t.sections.attributes : "Attributes"}
-              </Tooltip>
-            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filledStats.map((key) => (
                 <StatBlock
@@ -205,10 +200,8 @@ export function SharePage() {
         {/* Custom Fields */}
         {hasCustomFields && (
           <section className="mb-8">
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.customFields}>
-                {flavour ? t.sections.customFields : "Custom Fields"}
-              </Tooltip>
+            <div className="divider-rune mb-6">
+              {flavour ? t.sections.customFields : "Custom Fields"}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {sheet.customFields.map((field) => (
@@ -236,11 +229,6 @@ export function SharePage() {
             <div className="divider-rune mb-6">
               {flavour ? t.dividers.equipmentSection : "Hardware"}
             </div>
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.hardware}>
-                {flavour ? t.sections.hardware : "Hardware"}
-              </Tooltip>
-            </div>
             <div className="flex flex-col gap-3">
               {sheet.hardware.map((h) => (
                 <ComponentBlock key={h.id} name={h.name} description={h.description} />
@@ -252,11 +240,7 @@ export function SharePage() {
         {/* Services */}
         {hasServices && (
           <section className="mb-8">
-            <div className="section-header">
-              <Tooltip description={descriptions.sections.skills}>
-                {flavour ? t.sections.skills : "Services"}
-              </Tooltip>
-            </div>
+            <div className="divider-rune mb-6">{flavour ? t.sections.skills : "Services"}</div>
             <div className="flex flex-col gap-3">
               {sheet.services.map((s) => (
                 <ComponentBlock key={s.id} name={s.name} description={s.description} />
