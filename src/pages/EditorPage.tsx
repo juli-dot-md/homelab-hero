@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ComponentList } from "../components/ComponentList";
 import { CustomFieldList } from "../components/CustomFieldList";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+import { HowItWorks } from "../components/HowItWorks";
 import { MarkdownPanel } from "../components/MarkdownPanel";
 import { ThemePicker } from "../components/ThemePicker";
 import { Tooltip } from "../components/Tooltip";
@@ -124,6 +125,11 @@ export function EditorPage() {
               {icons.export} Markdown
             </button>
           </div>
+        </div>
+
+        {/* Documentation */}
+        <div className="mb-6">
+          <HowItWorks />
         </div>
 
         {isDirty && (

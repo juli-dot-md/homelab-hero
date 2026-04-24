@@ -25,7 +25,7 @@ const SECTIONS: Section[] = [
 ];
 
 export function HowItWorks() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const regionId = useId();
 
   return (
