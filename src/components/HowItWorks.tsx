@@ -2,25 +2,39 @@ import { useId, useState } from "react";
 
 type Section = {
   heading: string;
-  body: string;
+  paragraphs: string[];
+  bullets?: string[];
 };
 
 const SECTIONS: Section[] = [
   {
     heading: "The Sheet",
-    body: "Fill out the form to describe your homelab: give it a name, a backstory, and fill in the attributes (reliability, cost, security, etc.). Add hardware components, services, and any custom fields you want to track. Everything auto-saves to your browser as you type.",
+    paragraphs: [
+      "Fill out the form to describe your homelab: give it a name, a backstory, and fill in the attributes (reliability, cost, security, etc.). Add hardware components, services, and any custom fields you want to track. Everything auto-saves to your browser as you type.",
+    ],
   },
   {
     heading: "Themes",
-    body: "Pick a visual theme from the dropdown — Fantasy or Sci-Fi, each with several variants. The theme changes the look, the labels, and the example placeholder text. Your actual data stays the same regardless of which theme is active.",
+    paragraphs: [
+      "Pick a visual theme from the dropdown — Fantasy or Sci-Fi, each with several variants. The theme changes the look, the labels, and the example placeholder text. Your actual data stays the same regardless of which theme is active.",
+    ],
   },
   {
     heading: "Export, Import & Sharing",
-    body: "In the editor, the Markdown button opens a panel showing your sheet as a .md file. You can copy it, download it, or paste in a different sheet to import it. To share your sheet, host the .md file somewhere public (GitHub, GitLab, any static host) and paste the raw file URL into the Share panel on the preview page. Anyone with the resulting share link can view your sheet — no account needed.",
+    paragraphs: [
+      "In the editor, the Markdown button opens a panel with your sheet as a .md file — plain text you can read in any editor. You can copy it, download it, or paste in a different sheet to import it.",
+      "To share with a link, host the .md file somewhere public so the raw text (just the plain file contents, not an HTML page around it) is accessible via a URL. Two options that work without a git workflow:",
+    ],
+    bullets: [
+      "GitHub Gist (gist.github.com) — paste your markdown into a new public gist, then click Raw. Requires a free GitHub account but no repo or git needed.",
+      "GitHub repository — upload your .md file to a public repo, open the file, click Raw. The URL starts with raw.githubusercontent.com.",
+    ],
   },
   {
     heading: "Privacy",
-    body: "Everything is stored in your browser's localStorage. Nothing is sent to any server. Clearing your browser data will erase your sheet — export it first if you want to keep it.",
+    paragraphs: [
+      "Everything is stored in your browser's localStorage. Nothing is sent to any server. Clearing your browser data will erase your sheet — export it first if you want to keep it.",
+    ],
   },
 ];
 
@@ -29,7 +43,7 @@ export function HowItWorks() {
   const regionId = useId();
 
   return (
-    <div className="how-it-works w-full max-w-md" style={{ marginTop: "1rem" }}>
+    <div className="how-it-works w-full">
       <button
         type="button"
         className="how-it-works-toggle btn-ghost"
@@ -50,9 +64,21 @@ export function HowItWorks() {
         {SECTIONS.map((s) => (
           <div key={s.heading} className="how-it-works-section">
             <h3 className="how-it-works-heading">{s.heading}</h3>
-            <p className="how-it-works-text">{s.body}</p>
+            {s.paragraphs.map((p, i) => (
+              <p key={i} className="how-it-works-text">{p}</p>
+            ))}
+            {s.bullets && (
+              <ul className="how-it-works-bullets">
+                {s.bullets.map((b, i) => (
+                  <li key={i} className="how-it-works-text">{b}</li>
+                ))}
+              </ul>
+            )}
           </div>
         ))}
+        <p className="how-it-works-text how-it-works-share-footer">
+          Once you have the raw URL, go to the Preview page, click Share, paste the URL, and copy the generated link.
+        </p>
       </div>
     </div>
   );

@@ -53,6 +53,13 @@ describe("<HowItWorks>", () => {
     expect(screen.getByText("Privacy")).toBeInTheDocument();
   });
 
+  it("sharing section mentions GitHub Gist and raw URL", () => {
+    render(<HowItWorks />);
+    fireEvent.click(screen.getByRole("button", { name: /how does this work/i }));
+    expect(screen.getByText(/github gist/i)).toBeInTheDocument();
+    expect(screen.getByText(/raw\.githubusercontent\.com/i)).toBeInTheDocument();
+  });
+
   it("toggle button label indicates current state", () => {
     render(<HowItWorks />);
     const btn = screen.getByRole("button", { name: /how does this work/i });
